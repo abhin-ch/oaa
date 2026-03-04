@@ -1,9 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/store/project';
 import { useUIStore } from '@/store/ui';
 
 export function Step6Renewables() {
+  const t = useTranslations();
   const { building, updateBuilding } = useProjectStore();
   const { nextStep, prevStep } = useUIStore();
 
@@ -20,19 +22,19 @@ export function Step6Renewables() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-text-primary">Renewables & Offsets</h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Add on-site generation and carbon offsets to reduce your net energy and emissions.
-        </p>
+        <h2 className="text-2xl font-semibold text-text-primary">{t('wizard.step6.title')}</h2>
+        <p className="mt-1 text-sm text-text-secondary">{t('wizard.step6.description')}</p>
       </div>
 
       {/* Solar PV */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Solar PV</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step6.solarPvLabel')}
+        </legend>
         <div className="flex gap-3">
           <div className="flex-1">
             <label htmlFor="pv-kw" className="text-xs text-text-tertiary">
-              Installed Capacity (kW)
+              {t('wizard.step6.pvCapacityLabel')}
             </label>
             <input
               id="pv-kw"
@@ -41,13 +43,13 @@ export function Step6Renewables() {
               step="0.1"
               value={building.renewables.pvKw || ''}
               onChange={(e) => updateRenewables({ pvKw: Number(e.target.value) || 0 })}
-              placeholder="e.g. 10"
+              placeholder={t('wizard.step6.pvCapacityPlaceholder')}
               className="h-10 w-full rounded-lg border border-border-default bg-bg-surface px-3 text-sm"
             />
           </div>
           <div className="flex-1">
             <label htmlFor="pv-kwh" className="text-xs text-text-tertiary">
-              Annual Generation (kWh)
+              {t('wizard.step6.pvAnnualLabel')}
             </label>
             <input
               id="pv-kwh"
@@ -56,7 +58,7 @@ export function Step6Renewables() {
               step="100"
               value={building.renewables.pvAnnualKwh || ''}
               onChange={(e) => updateRenewables({ pvAnnualKwh: Number(e.target.value) || 0 })}
-              placeholder="e.g. 12000"
+              placeholder={t('wizard.step6.pvAnnualPlaceholder')}
               className="h-10 w-full rounded-lg border border-border-default bg-bg-surface px-3 text-sm"
             />
           </div>
@@ -65,11 +67,13 @@ export function Step6Renewables() {
 
       {/* Wind */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Wind</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step6.windLabel')}
+        </legend>
         <div className="flex gap-3">
           <div className="flex-1">
             <label htmlFor="wind-kw" className="text-xs text-text-tertiary">
-              Capacity (kW)
+              {t('wizard.step6.windCapacityLabel')}
             </label>
             <input
               id="wind-kw"
@@ -83,7 +87,7 @@ export function Step6Renewables() {
           </div>
           <div className="flex-1">
             <label htmlFor="wind-kwh" className="text-xs text-text-tertiary">
-              Annual (kWh)
+              {t('wizard.step6.windAnnualLabel')}
             </label>
             <input
               id="wind-kwh"
@@ -100,11 +104,13 @@ export function Step6Renewables() {
 
       {/* Offsets */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Offsets & Credits</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step6.offsetsLabel')}
+        </legend>
         <div className="flex flex-col gap-3">
           <div>
             <label htmlFor="recs" className="text-xs text-text-tertiary">
-              Renewable Energy Certificates (kWh/yr)
+              {t('wizard.step6.recsLabel')}
             </label>
             <input
               id="recs"
@@ -117,7 +123,7 @@ export function Step6Renewables() {
           </div>
           <div>
             <label htmlFor="green-gas" className="text-xs text-text-tertiary">
-              Green Gas (m³/yr)
+              {t('wizard.step6.greenGasLabel')}
             </label>
             <input
               id="green-gas"
@@ -130,7 +136,7 @@ export function Step6Renewables() {
           </div>
           <div>
             <label htmlFor="credits" className="text-xs text-text-tertiary">
-              Carbon Credits (kgCO₂)
+              {t('wizard.step6.carbonCreditsLabel')}
             </label>
             <input
               id="credits"
@@ -150,13 +156,13 @@ export function Step6Renewables() {
           onClick={prevStep}
           className="rounded-lg border border-border-default px-5 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-raised"
         >
-          ← Back
+          &larr; {t('common.back')}
         </button>
         <button
           onClick={nextStep}
           className="rounded-lg bg-energy-400 px-5 py-2.5 text-sm font-medium text-text-primary transition-all hover:brightness-105 active:scale-[0.98]"
         >
-          View Results →
+          {t('wizard.step6.viewResults')} &rarr;
         </button>
       </div>
     </div>

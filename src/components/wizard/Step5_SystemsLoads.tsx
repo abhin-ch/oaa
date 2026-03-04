@@ -1,54 +1,39 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/store/project';
 import { useUIStore } from '@/store/ui';
 import type { HeatingType, CoolingType, DHWType, VentilationType } from '@/schema/building';
 
-const heatingTypes: { value: HeatingType; label: string }[] = [
-  { value: 'gas_furnace', label: 'Gas Furnace' },
-  { value: 'boiler', label: 'Gas Boiler' },
-  { value: 'heat_pump', label: 'Heat Pump' },
-  { value: 'electric_baseboard', label: 'Electric Baseboard' },
-  { value: 'other', label: 'Other' },
+const heatingTypeValues: HeatingType[] = [
+  'gas_furnace',
+  'boiler',
+  'heat_pump',
+  'electric_baseboard',
+  'other',
 ];
 
-const coolingTypes: { value: CoolingType; label: string }[] = [
-  { value: 'central_ac', label: 'Central AC' },
-  { value: 'heat_pump', label: 'Heat Pump' },
-  { value: 'none', label: 'None' },
-  { value: 'other', label: 'Other' },
-];
+const coolingTypeValues: CoolingType[] = ['central_ac', 'heat_pump', 'none', 'other'];
 
-const dhwTypes: { value: DHWType; label: string }[] = [
-  { value: 'gas_tank', label: 'Gas Tank' },
-  { value: 'electric_tank', label: 'Electric Tank' },
-  { value: 'heat_pump', label: 'Heat Pump' },
-  { value: 'tankless', label: 'Tankless' },
-  { value: 'other', label: 'Other' },
-];
+const dhwTypeValues: DHWType[] = ['gas_tank', 'electric_tank', 'heat_pump', 'tankless', 'other'];
 
-const ventTypes: { value: VentilationType; label: string }[] = [
-  { value: 'natural', label: 'Natural' },
-  { value: 'mechanical', label: 'Mechanical' },
-  { value: 'hrv', label: 'HRV' },
-  { value: 'erv', label: 'ERV' },
-];
+const ventTypeValues: VentilationType[] = ['natural', 'mechanical', 'hrv', 'erv'];
 
 const presets = [
   {
-    label: 'Standard Gas',
+    key: 'presetStandardGas',
     heating: { type: 'gas_furnace' as HeatingType, cop: 0.92 },
     cooling: { type: 'central_ac' as CoolingType, cop: 3.0 },
     dhw: { type: 'gas_tank' as DHWType, efficiency: 0.67 },
   },
   {
-    label: 'Heat Pump',
+    key: 'presetHeatPump',
     heating: { type: 'heat_pump' as HeatingType, cop: 3.5 },
     cooling: { type: 'heat_pump' as CoolingType, cop: 4.0 },
     dhw: { type: 'heat_pump' as DHWType, efficiency: 0.9 },
   },
   {
-    label: 'All Electric',
+    key: 'presetAllElectric',
     heating: { type: 'electric_baseboard' as HeatingType, cop: 1.0 },
     cooling: { type: 'central_ac' as CoolingType, cop: 3.0 },
     dhw: { type: 'electric_tank' as DHWType, efficiency: 0.9 },
@@ -56,6 +41,7 @@ const presets = [
 ];
 
 export function Step5SystemsLoads() {
+  const t = useTranslations();
   const { building, updateBuilding } = useProjectStore();
   const { nextStep, prevStep } = useUIStore();
 
@@ -68,23 +54,23 @@ export function Step5SystemsLoads() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-text-primary">Systems & Loads</h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Define your HVAC, hot water, lighting, and equipment systems.
-        </p>
+        <h2 className="text-2xl font-semibold text-text-primary">{t('wizard.step5.title')}</h2>
+        <p className="mt-1 text-sm text-text-secondary">{t('wizard.step5.description')}</p>
       </div>
 
       {/* Presets */}
       <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium text-text-secondary">System Packages</span>
+        <span className="text-sm font-medium text-text-secondary">
+          {t('wizard.step5.systemPackages')}
+        </span>
         <div className="flex flex-wrap gap-2">
           {presets.map((p) => (
             <button
-              key={p.label}
+              key={p.key}
               onClick={() => applyPreset(p)}
               className="rounded-lg border border-border-default px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-energy-400 hover:bg-energy-50 hover:text-energy-700"
             >
-              {p.label}
+              {t(`wizard.step5.${p.key}` as Parameters<typeof t>[0])}
             </button>
           ))}
         </div>
@@ -92,11 +78,13 @@ export function Step5SystemsLoads() {
 
       {/* Heating */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Heating</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step5.heatingLabel')}
+        </legend>
         <div className="flex gap-3">
           <div className="flex-1">
             <label htmlFor="heat-type" className="text-xs text-text-tertiary">
-              Type
+              {t('wizard.step5.typeLabel')}
             </label>
             <select
               id="heat-type"
@@ -111,16 +99,16 @@ export function Step5SystemsLoads() {
               }
               className="h-10 w-full rounded-lg border border-border-default bg-bg-surface px-3 text-sm"
             >
-              {heatingTypes.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
+              {heatingTypeValues.map((v) => (
+                <option key={v} value={v}>
+                  {t(`wizard.step5.heatingTypes.${v}` as Parameters<typeof t>[0])}
                 </option>
               ))}
             </select>
           </div>
           <div className="w-28">
             <label htmlFor="heat-cop" className="text-xs text-text-tertiary">
-              COP / AFUE
+              {t('wizard.step5.copLabel')}
             </label>
             <input
               id="heat-cop"
@@ -144,11 +132,13 @@ export function Step5SystemsLoads() {
 
       {/* Cooling */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Cooling</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step5.coolingLabel')}
+        </legend>
         <div className="flex gap-3">
           <div className="flex-1">
             <label htmlFor="cool-type" className="text-xs text-text-tertiary">
-              Type
+              {t('wizard.step5.typeLabel')}
             </label>
             <select
               id="cool-type"
@@ -163,16 +153,16 @@ export function Step5SystemsLoads() {
               }
               className="h-10 w-full rounded-lg border border-border-default bg-bg-surface px-3 text-sm"
             >
-              {coolingTypes.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
+              {coolingTypeValues.map((v) => (
+                <option key={v} value={v}>
+                  {t(`wizard.step5.coolingTypes.${v}` as Parameters<typeof t>[0])}
                 </option>
               ))}
             </select>
           </div>
           <div className="w-28">
             <label htmlFor="cool-cop" className="text-xs text-text-tertiary">
-              COP
+              {t('wizard.step5.copCoolingLabel')}
             </label>
             <input
               id="cool-cop"
@@ -196,11 +186,13 @@ export function Step5SystemsLoads() {
 
       {/* DHW */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Hot Water</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step5.dhwLabel')}
+        </legend>
         <div className="flex gap-3">
           <div className="flex-1">
             <label htmlFor="dhw-type" className="text-xs text-text-tertiary">
-              Type
+              {t('wizard.step5.typeLabel')}
             </label>
             <select
               id="dhw-type"
@@ -215,16 +207,16 @@ export function Step5SystemsLoads() {
               }
               className="h-10 w-full rounded-lg border border-border-default bg-bg-surface px-3 text-sm"
             >
-              {dhwTypes.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
+              {dhwTypeValues.map((v) => (
+                <option key={v} value={v}>
+                  {t(`wizard.step5.dhwTypes.${v}` as Parameters<typeof t>[0])}
                 </option>
               ))}
             </select>
           </div>
           <div className="w-28">
             <label htmlFor="dhw-eff" className="text-xs text-text-tertiary">
-              Efficiency
+              {t('wizard.step5.efficiencyLabel')}
             </label>
             <input
               id="dhw-eff"
@@ -249,11 +241,13 @@ export function Step5SystemsLoads() {
 
       {/* Ventilation */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Ventilation</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step5.ventilationLabel')}
+        </legend>
         <div className="flex gap-3">
           <div className="flex-1">
             <label htmlFor="vent-type" className="text-xs text-text-tertiary">
-              Type
+              {t('wizard.step5.typeLabel')}
             </label>
             <select
               id="vent-type"
@@ -265,16 +259,16 @@ export function Step5SystemsLoads() {
               }
               className="h-10 w-full rounded-lg border border-border-default bg-bg-surface px-3 text-sm"
             >
-              {ventTypes.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
+              {ventTypeValues.map((v) => (
+                <option key={v} value={v}>
+                  {t(`wizard.step5.ventTypes.${v}` as Parameters<typeof t>[0])}
                 </option>
               ))}
             </select>
           </div>
           <div className="w-28">
             <label htmlFor="vent-rate" className="text-xs text-text-tertiary">
-              Rate (ACH)
+              {t('wizard.step5.rateLabel')}
             </label>
             <input
               id="vent-rate"
@@ -293,7 +287,7 @@ export function Step5SystemsLoads() {
           {(building.ventilation.type === 'hrv' || building.ventilation.type === 'erv') && (
             <div className="w-28">
               <label htmlFor="hrv-eff" className="text-xs text-text-tertiary">
-                HRV Eff.
+                {t('wizard.step5.hrvEffLabel')}
               </label>
               <input
                 id="hrv-eff"
@@ -319,11 +313,13 @@ export function Step5SystemsLoads() {
 
       {/* Internal Loads */}
       <fieldset className="flex flex-col gap-3 rounded-lg border border-border-default p-4">
-        <legend className="px-1 text-sm font-medium text-text-secondary">Internal Loads</legend>
+        <legend className="px-1 text-sm font-medium text-text-secondary">
+          {t('wizard.step5.internalLoadsLabel')}
+        </legend>
         <div className="flex gap-3">
           <div className="flex-1">
             <label htmlFor="lighting" className="text-xs text-text-tertiary">
-              Lighting (W/m²)
+              {t('wizard.step5.lightingLabel')}
             </label>
             <input
               id="lighting"
@@ -344,7 +340,7 @@ export function Step5SystemsLoads() {
           </div>
           <div className="flex-1">
             <label htmlFor="equipment" className="text-xs text-text-tertiary">
-              Equipment (W/m²)
+              {t('wizard.step5.equipmentLabel')}
             </label>
             <input
               id="equipment"
@@ -372,13 +368,13 @@ export function Step5SystemsLoads() {
           onClick={prevStep}
           className="rounded-lg border border-border-default px-5 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-raised"
         >
-          ← Back
+          &larr; {t('common.back')}
         </button>
         <button
           onClick={nextStep}
           className="rounded-lg bg-energy-400 px-5 py-2.5 text-sm font-medium text-text-primary transition-all hover:brightness-105 active:scale-[0.98]"
         >
-          Next →
+          {t('common.next')} &rarr;
         </button>
       </div>
     </div>

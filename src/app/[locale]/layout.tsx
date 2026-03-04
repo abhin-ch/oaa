@@ -4,6 +4,8 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { OfflineBanner } from '@/components/layout/OfflineBanner';
+import { SkipToContent } from '@/components/layout/SkipToContent';
 import '../globals.css';
 
 const geistSans = localFont({
@@ -70,7 +72,11 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <SkipToContent />
+          <OfflineBanner />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );
