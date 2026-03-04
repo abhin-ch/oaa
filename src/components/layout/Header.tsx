@@ -1,15 +1,19 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useUIStore } from '@/store/ui';
+import { useRouter, usePathname } from '@/i18n/navigation';
 
 export function Header() {
-  const { theme, setTheme } = useUIStore();
+  const t = useTranslations();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { theme, setTheme, locale, setLocale } = useUIStore();
 
   const toggleTheme = () => {
     const next = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
     setTheme(next);
 
-    // Apply to document
     if (
       next === 'dark' ||
       (next === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -18,6 +22,12 @@ export function Header() {
     } else {
       document.documentElement.classList.remove('dark');
     }
+  };
+
+  const toggleLocale = () => {
+    const nextLocale = locale === 'en' ? 'fr' : 'en';
+    setLocale(nextLocale);
+    router.replace(pathname, { locale: nextLocale });
   };
 
   const themeIcon = theme === 'dark' ? '☀️' : theme === 'light' ? '🌙' : '💻';
@@ -29,25 +39,28 @@ export function Header() {
         style={{ paddingTop: 'var(--safe-top)' }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold tracking-tight text-text-primary">OBJECTIVE</span>
-        </div>
+        <button onClick={() => router.push('/')} className="flex items-center gap-2">
+          <span className="text-lg font-semibold tracking-tight text-text-primary">
+            {t('meta.appName')}
+          </span>
+        </button>
 
         {/* Right actions */}
         <div className="flex items-center gap-2">
           {/* Language toggle */}
           <button
+            onClick={toggleLocale}
             className="rounded-md px-2 py-1 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-raised hover:text-text-primary"
-            aria-label="Switch language"
+            aria-label={t('a11y.languageSwitch')}
           >
-            EN
+            {locale === 'en' ? 'FR' : 'EN'}
           </button>
 
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
             className="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-bg-raised hover:text-text-primary"
-            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+            aria-label={t('a11y.themeToggle')}
           >
             <span className="text-sm">{themeIcon}</span>
           </button>

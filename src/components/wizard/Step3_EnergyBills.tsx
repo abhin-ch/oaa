@@ -1,15 +1,11 @@
 'use client';
 
+import { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/store/project';
 import { useUIStore } from '@/store/ui';
-
-interface EnergyField {
-  id: string;
-  label: string;
-  unit: string;
-  key: keyof typeof defaultSources;
-  placeholder: string;
-}
+import { calculateTEUI1 } from '@/engine/teui1';
+import { isValidForTEUI1 } from '@/schema/building';
 
 const defaultSources = {
   electricityKwh: 0,
@@ -18,22 +14,15 @@ const defaultSources = {
   woodM3: 0,
 };
 
-const fields: EnergyField[] = [
-  {
-    id: 'electricity',
-    label: 'Electricity',
-    unit: 'kWh/yr',
-    key: 'electricityKwh',
-    placeholder: 'e.g. 20000',
-  },
-  { id: 'gas', label: 'Natural Gas', unit: 'm³/yr', key: 'gasM3', placeholder: 'e.g. 5000' },
-  { id: 'oil', label: 'Fuel Oil', unit: 'L/yr', key: 'oilL', placeholder: 'e.g. 0' },
-  { id: 'wood', label: 'Wood', unit: 'm³/yr', key: 'woodM3', placeholder: 'e.g. 0' },
-];
-
 export function Step3EnergyBills() {
+  const t = useTranslations();
   const { building, updateBuilding } = useProjectStore();
   const { nextStep, prevStep } = useUIStore();
+
+  const quickTeui = useMemo(() => {
+    if (!building || !isValidForTEUI1(building)) return null;
+    return calculateTEUI1(building);
+  }, [building]);
 
   if (!building) return null;
 
@@ -49,13 +38,42 @@ export function Step3EnergyBills() {
     });
   };
 
+  const fields = [
+    {
+      id: 'electricity',
+      label: t('wizard.step3.electricityLabel'),
+      unit: t('units.kwh') + '/yr',
+      key: 'electricityKwh' as keyof typeof defaultSources,
+      placeholder: t('wizard.step3.electricityPlaceholder'),
+    },
+    {
+      id: 'gas',
+      label: t('wizard.step3.gasLabel'),
+      unit: t('units.m3') + '/yr',
+      key: 'gasM3' as keyof typeof defaultSources,
+      placeholder: t('wizard.step3.gasPlaceholder'),
+    },
+    {
+      id: 'oil',
+      label: t('wizard.step3.oilLabel'),
+      unit: 'L/yr',
+      key: 'oilL' as keyof typeof defaultSources,
+      placeholder: t('wizard.step3.oilPlaceholder'),
+    },
+    {
+      id: 'wood',
+      label: t('wizard.step3.woodLabel'),
+      unit: t('units.m3') + '/yr',
+      key: 'woodM3' as keyof typeof defaultSources,
+      placeholder: t('wizard.step3.woodPlaceholder'),
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-text-primary">Energy Bills</h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Enter your annual energy consumption from utility bills. This gives you an instant TEUI.
-        </p>
+        <h2 className="text-2xl font-semibold text-text-primary">{t('wizard.step3.title')}</h2>
+        <p className="mt-1 text-sm text-text-secondary">{t('wizard.step3.description')}</p>
       </div>
 
       {/* Energy source inputs */}
@@ -80,24 +98,18 @@ export function Step3EnergyBills() {
         ))}
       </div>
 
-      {/* Quick TEUI preview if we have data */}
-      {hasAnyEnergy && building.geometry.conditionedAreaM2 > 0 && (
-        <div className="rounded-lg border border-energy-200 bg-energy-50 p-4">
+      {/* Quick TEUI preview */}
+      {quickTeui && (
+        <div className="rounded-lg border border-energy-200 bg-energy-50 p-4" aria-live="polite">
           <p className="text-xs font-medium uppercase tracking-wider text-energy-700">
-            Quick TEUI Estimate
+            {t('results.teuiLabel')}
           </p>
-          <p className="mt-1 text-sm text-text-secondary">
-            Based on your energy bills and floor area, your building&apos;s detailed TEUI will be
-            calculated on the Results page.
+          <p className="mt-1 font-mono text-2xl font-bold tabular-nums text-energy-700">
+            {quickTeui.teui.toFixed(1)}{' '}
+            <span className="text-sm font-normal">{t('units.kwhPerM2Yr')}</span>
           </p>
         </div>
       )}
-
-      {/* Skip option */}
-      <p className="text-xs text-text-tertiary">
-        Don&apos;t have utility bills? You can skip this step and the app will estimate energy use
-        from your building&apos;s physical characteristics.
-      </p>
 
       {/* Navigation */}
       <div className="flex justify-between pt-2">
@@ -105,20 +117,20 @@ export function Step3EnergyBills() {
           onClick={prevStep}
           className="rounded-lg border border-border-default px-5 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-raised"
         >
-          ← Back
+          ← {t('common.back')}
         </button>
         <div className="flex gap-2">
           <button
             onClick={nextStep}
             className="rounded-lg border border-border-default px-5 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-raised"
           >
-            Skip
+            {t('wizard.step3.skip')}
           </button>
           <button
             onClick={nextStep}
             className="rounded-lg bg-energy-400 px-5 py-2.5 text-sm font-medium text-text-primary transition-all hover:brightness-105 active:scale-[0.98]"
           >
-            Next →
+            {t('common.next')} →
           </button>
         </div>
       </div>
