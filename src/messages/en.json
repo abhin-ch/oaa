@@ -1,0 +1,156 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "back": "Back",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "offline": "You are currently offline",
+    "backOnline": "You are back online",
+    "search": "Search",
+    "create": "Create",
+    "edit": "Edit",
+    "close": "Close",
+    "undo": "Undo",
+    "redo": "Redo",
+    "export": "Export",
+    "import": "Import",
+    "settings": "Settings",
+    "help": "Help"
+  },
+  "nav": {
+    "home": "Home",
+    "building": "Building",
+    "energy": "Energy",
+    "results": "Results",
+    "settings": "Settings",
+    "projects": "Projects"
+  },
+  "meta": {
+    "appName": "OBJECTIVE",
+    "appDescription": "Building Energy Performance Platform",
+    "tagline": "Model, measure, and improve building energy performance"
+  },
+  "wizard": {
+    "step1": {
+      "title": "Project Setup",
+      "description": "Enter your building's basic information to get started",
+      "nameLabel": "Project Name",
+      "namePlaceholder": "My Building Project",
+      "addressLabel": "Building Address",
+      "addressPlaceholder": "123 Main Street, City, Province",
+      "buildingTypeLabel": "Building Type",
+      "buildingTypePlaceholder": "Select a building type"
+    },
+    "step2": {
+      "title": "Building Basics",
+      "description": "Define the physical characteristics of your building",
+      "areaLabel": "Gross Floor Area",
+      "areaPlaceholder": "Enter area in m\u00b2",
+      "floorsLabel": "Number of Floors",
+      "floorsPlaceholder": "Enter number of floors",
+      "occupancyLabel": "Typical Occupancy",
+      "occupancyPlaceholder": "Enter number of occupants"
+    },
+    "step3": {
+      "title": "Energy Bills",
+      "description": "Enter your building's annual energy consumption data",
+      "electricityLabel": "Electricity",
+      "electricityPlaceholder": "Annual electricity in kWh",
+      "gasLabel": "Natural Gas",
+      "gasPlaceholder": "Annual gas in m\u00b3",
+      "oilLabel": "Heating Oil",
+      "oilPlaceholder": "Annual oil in litres",
+      "woodLabel": "Wood / Biomass",
+      "woodPlaceholder": "Annual wood in tonnes"
+    },
+    "step4": {
+      "title": "Envelope",
+      "description": "Describe your building's thermal envelope",
+      "wallsLabel": "Wall Insulation (RSI)",
+      "wallsPlaceholder": "Effective RSI value",
+      "roofLabel": "Roof Insulation (RSI)",
+      "roofPlaceholder": "Effective RSI value",
+      "windowsLabel": "Window U-value",
+      "windowsPlaceholder": "U-value in W/m\u00b2\u00b7K",
+      "airtightnessLabel": "Airtightness",
+      "airtightnessPlaceholder": "Air changes per hour at 50 Pa"
+    },
+    "step5": {
+      "title": "Systems & Loads",
+      "description": "Define your building's mechanical systems and internal loads",
+      "hvacLabel": "HVAC System Type",
+      "hvacPlaceholder": "Select HVAC system",
+      "dhwLabel": "Domestic Hot Water System",
+      "dhwPlaceholder": "Select DHW system",
+      "lightingLabel": "Lighting Power Density",
+      "lightingPlaceholder": "W/m\u00b2",
+      "equipmentLabel": "Equipment Power Density",
+      "equipmentPlaceholder": "W/m\u00b2"
+    },
+    "step6": {
+      "title": "Renewables",
+      "description": "Add renewable energy sources and green energy credits",
+      "pvLabel": "Photovoltaic (PV) System",
+      "pvPlaceholder": "Installed capacity in kW",
+      "windLabel": "Wind Turbine",
+      "windPlaceholder": "Installed capacity in kW",
+      "recsLabel": "Renewable Energy Certificates (RECs)",
+      "recsPlaceholder": "Annual RECs in kWh",
+      "greenGasLabel": "Green Gas / RNG",
+      "greenGasPlaceholder": "Annual green gas in m\u00b3"
+    },
+    "step7": {
+      "title": "Results",
+      "description": "Review your building's energy performance results"
+    }
+  },
+  "results": {
+    "teuiLabel": "TEUI",
+    "teuiDescription": "Total Energy Use Intensity",
+    "tediLabel": "TEDI",
+    "tediDescription": "Thermal Energy Demand Intensity",
+    "ghgiLabel": "GHGI",
+    "ghgiDescription": "Greenhouse Gas Intensity",
+    "benchmarks": "Benchmarks",
+    "energyBalance": "Energy Balance",
+    "sankey": "Energy Flow (Sankey)",
+    "percentOfCode": "{value}% of code requirement",
+    "betterThanAverage": "{value}% better than average"
+  },
+  "units": {
+    "kwhPerM2Yr": "kWh/m\u00b2/yr",
+    "kgCo2PerM2Yr": "kg CO\u2082/m\u00b2/yr",
+    "kwh": "kWh",
+    "m2": "m\u00b2",
+    "m3": "m\u00b3",
+    "degC": "\u00b0C",
+    "wPerM2K": "W/m\u00b2\u00b7K",
+    "ach": "ACH"
+  },
+  "buildings": {
+    "createNew": "Create New Project",
+    "noProjects": "No projects yet",
+    "emptyState": "Get started by creating your first building energy model",
+    "deleteConfirm": "Are you sure you want to delete this project? This action cannot be undone.",
+    "lastEdited": "Last edited {date}"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "resultsUpdated": "Results have been updated",
+    "stepNofTotal": "Step {current} of {total}",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "languageSwitch": "Switch language",
+    "themeToggle": "Toggle dark mode"
+  },
+  "errors": {
+    "required": "This field is required",
+    "positiveNumber": "Please enter a positive number",
+    "invalidAddress": "Please enter a valid address",
+    "calculationFailed": "Calculation failed. Please check your inputs and try again.",
+    "projectNotFound": "Project not found",
+    "offlineNoCache": "You are offline and this content is not available in cache"
+  }
+}
