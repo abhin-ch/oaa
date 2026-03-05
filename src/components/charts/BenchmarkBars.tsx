@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 interface BenchmarkEntry {
   label: string;
   value: number;
@@ -18,10 +20,11 @@ interface BenchmarkBarsProps {
  * Shows the user's building vs code max, national average, and Passive House target.
  */
 export function BenchmarkBars({ entries, unit = 'kWh/m²/yr', maxValue }: BenchmarkBarsProps) {
+  const t = useTranslations();
   const max = maxValue ?? Math.max(...entries.map((e) => e.value)) * 1.1;
 
   return (
-    <div className="flex flex-col gap-3" role="img" aria-label="Benchmark comparison chart">
+    <div className="flex flex-col gap-3" role="img" aria-label={t('results.benchmarkComparison')}>
       {entries.map((entry) => {
         const widthPercent = Math.min((entry.value / max) * 100, 100);
 
@@ -52,11 +55,13 @@ export function BenchmarkBars({ entries, unit = 'kWh/m²/yr', maxValue }: Benchm
 
       {/* Accessible data table (screen reader) */}
       <table className="sr-only">
-        <caption>Benchmark comparison</caption>
+        <caption>{t('results.benchmarkComparison')}</caption>
         <thead>
           <tr>
-            <th>Building</th>
-            <th>Value ({unit})</th>
+            <th>{t('results.buildingLabel')}</th>
+            <th>
+              {t('results.valueLabel')} ({unit})
+            </th>
           </tr>
         </thead>
         <tbody>

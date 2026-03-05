@@ -1,25 +1,21 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useUIStore } from '@/store/ui';
 
-interface WizardStep {
-  number: number;
-  label: string;
-  description: string;
-}
-
-const wizardSteps: WizardStep[] = [
-  { number: 1, label: 'Project Setup', description: 'Name, address, type' },
-  { number: 2, label: 'Building Basics', description: 'Area, floors, occupancy' },
-  { number: 3, label: 'Energy Bills', description: 'Electricity, gas, fuel' },
-  { number: 4, label: 'Envelope', description: 'Walls, roof, windows' },
-  { number: 5, label: 'Systems & Loads', description: 'HVAC, DHW, lighting' },
-  { number: 6, label: 'Renewables', description: 'PV, wind, offsets' },
-  { number: 7, label: 'Results', description: 'Dashboard & analysis' },
-];
-
 export function Sidebar() {
+  const t = useTranslations();
   const { currentStep, setStep } = useUIStore();
+
+  const wizardSteps = [
+    { number: 1, label: t('wizard.step1.title') },
+    { number: 2, label: t('wizard.step2.title') },
+    { number: 3, label: t('wizard.step3.title') },
+    { number: 4, label: t('wizard.step4.title') },
+    { number: 5, label: t('wizard.step5.title') },
+    { number: 6, label: t('wizard.step6.title') },
+    { number: 7, label: t('wizard.step7.title') },
+  ];
 
   return (
     <aside className="hidden w-60 shrink-0 border-r border-border-default bg-bg-surface lg:block">
@@ -59,7 +55,6 @@ export function Sidebar() {
                 <div className={`text-sm font-medium ${isActive ? 'text-text-primary' : ''}`}>
                   {step.label}
                 </div>
-                <div className="text-xs text-text-tertiary">{step.description}</div>
               </div>
             </button>
           );

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useUIStore } from '@/store/ui';
 import { Step1ProjectSetup } from './Step1_ProjectSetup';
 import { Step2BuildingBasics } from './Step2_BuildingBasics';
@@ -20,6 +21,7 @@ const steps: Record<number, React.ComponentType> = {
 };
 
 export function WizardContainer() {
+  const t = useTranslations();
   const { currentStep } = useUIStore();
   const StepComponent = steps[currentStep] ?? Step1ProjectSetup;
 
@@ -28,7 +30,7 @@ export function WizardContainer() {
       {/* Step header — visible on mobile */}
       <div className="lg:hidden">
         <p className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
-          Step {currentStep} of 7
+          {t('wizard.stepNofTotal', { current: currentStep, total: 7 })}
         </p>
       </div>
 

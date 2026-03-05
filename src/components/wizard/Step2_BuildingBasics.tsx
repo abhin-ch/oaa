@@ -1,9 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/store/project';
 import { useUIStore } from '@/store/ui';
 
 export function Step2BuildingBasics() {
+  const t = useTranslations();
   const { building, updateBuilding } = useProjectStore();
   const { nextStep, prevStep } = useUIStore();
 
@@ -22,16 +24,14 @@ export function Step2BuildingBasics() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-text-primary">Building Basics</h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Tell us about the size and use of your building.
-        </p>
+        <h2 className="text-2xl font-semibold text-text-primary">{t('wizard.step2.title')}</h2>
+        <p className="mt-1 text-sm text-text-secondary">{t('wizard.step2.description')}</p>
       </div>
 
       {/* Floor area */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="area" className="text-sm font-medium text-text-secondary">
-          Conditioned Floor Area (m²)
+          {t('wizard.step2.areaLabel')} ({t('units.m2')})
         </label>
         <input
           id="area"
@@ -40,7 +40,7 @@ export function Step2BuildingBasics() {
           step="1"
           value={building.geometry.conditionedAreaM2 || ''}
           onChange={(e) => updateGeometry({ conditionedAreaM2: Number(e.target.value) || 0 })}
-          placeholder="e.g. 1500"
+          placeholder={t('wizard.step2.areaPlaceholder')}
           className="h-11 rounded-lg border border-border-default bg-bg-surface px-3.5 text-base text-text-primary placeholder:text-text-tertiary transition-colors focus:border-energy-400 focus:outline-none focus:ring-3 focus:ring-energy-100"
         />
       </div>
@@ -48,7 +48,7 @@ export function Step2BuildingBasics() {
       {/* Number of floors */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="floors" className="text-sm font-medium text-text-secondary">
-          Number of Floors
+          {t('wizard.step2.floorsLabel')}
         </label>
         <input
           id="floors"
@@ -57,6 +57,7 @@ export function Step2BuildingBasics() {
           max="200"
           value={building.geometry.floors}
           onChange={(e) => updateGeometry({ floors: Number(e.target.value) || 1 })}
+          placeholder={t('wizard.step2.floorsPlaceholder')}
           className="h-11 rounded-lg border border-border-default bg-bg-surface px-3.5 text-base text-text-primary placeholder:text-text-tertiary transition-colors focus:border-energy-400 focus:outline-none focus:ring-3 focus:ring-energy-100"
         />
       </div>
@@ -64,7 +65,7 @@ export function Step2BuildingBasics() {
       {/* Volume */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="volume" className="text-sm font-medium text-text-secondary">
-          Building Volume (m³)
+          {t('wizard.step2.volumeLabel')} ({t('units.m3')})
         </label>
         <input
           id="volume"
@@ -73,18 +74,15 @@ export function Step2BuildingBasics() {
           step="1"
           value={building.geometry.volumeM3 || ''}
           onChange={(e) => updateGeometry({ volumeM3: Number(e.target.value) || 0 })}
-          placeholder="e.g. 4500"
+          placeholder={t('wizard.step2.volumePlaceholder')}
           className="h-11 rounded-lg border border-border-default bg-bg-surface px-3.5 text-base text-text-primary placeholder:text-text-tertiary transition-colors focus:border-energy-400 focus:outline-none focus:ring-3 focus:ring-energy-100"
         />
-        <p className="text-xs text-text-tertiary">
-          If unknown, this can be estimated as area × average ceiling height.
-        </p>
       </div>
 
       {/* Occupant count */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="occupants" className="text-sm font-medium text-text-secondary">
-          Number of Occupants
+          {t('wizard.step2.occupancyLabel')}
         </label>
         <input
           id="occupants"
@@ -92,7 +90,7 @@ export function Step2BuildingBasics() {
           min="0"
           value={building.occupancy.count || ''}
           onChange={(e) => updateOccupancy({ count: Number(e.target.value) || 0 })}
-          placeholder="e.g. 50"
+          placeholder={t('wizard.step2.occupancyPlaceholder')}
           className="h-11 rounded-lg border border-border-default bg-bg-surface px-3.5 text-base text-text-primary placeholder:text-text-tertiary transition-colors focus:border-energy-400 focus:outline-none focus:ring-3 focus:ring-energy-100"
         />
       </div>
@@ -103,14 +101,14 @@ export function Step2BuildingBasics() {
           onClick={prevStep}
           className="rounded-lg border border-border-default px-5 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-raised"
         >
-          ← Back
+          ← {t('common.back')}
         </button>
         <button
           onClick={nextStep}
           disabled={!canProceed}
           className="rounded-lg bg-energy-400 px-5 py-2.5 text-sm font-medium text-text-primary transition-all hover:brightness-105 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Next →
+          {t('common.next')} →
         </button>
       </div>
     </div>

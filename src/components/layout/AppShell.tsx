@@ -19,7 +19,7 @@ export function AppShell({ children, results }: AppShellProps) {
         <Sidebar />
 
         {/* Main content area */}
-        <main className="flex flex-1 flex-col overflow-hidden lg:flex-row">
+        <main id="main-content" className="flex flex-1 flex-col overflow-hidden lg:flex-row">
           {/* Input panel (40% on desktop) */}
           <div className="flex-1 overflow-y-auto p-4 pb-32 md:p-6 lg:max-w-[45%] lg:pb-6">
             {children}

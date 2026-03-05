@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface TEUIHeroNumberProps {
   value: number; // TEUI in kWh/m²/yr
@@ -17,13 +18,6 @@ function getPerformanceColor(value: number, benchmarkMax: number): string {
   return 'text-warning-500';
 }
 
-function getPerformanceLabel(value: number, averageValue: number): string {
-  const diff = ((averageValue - value) / averageValue) * 100;
-  if (diff > 0) return `${diff.toFixed(0)}% better than average`;
-  if (diff < 0) return `${Math.abs(diff).toFixed(0)}% above average`;
-  return 'At average';
-}
-
 /**
  * Animated TEUI hero number — the single most important visual element.
  * Shows the TEUI value with performance-based color and benchmark context.
@@ -35,6 +29,7 @@ export function TEUIHeroNumber({
   label = 'TEUI',
   unit = 'kWh/m²/yr',
 }: TEUIHeroNumberProps) {
+  const t = useTranslations();
   const [displayValue, setDisplayValue] = useState(value);
   const animationRef = useRef<number | null>(null);
   const previousValue = useRef(value);
@@ -76,14 +71,21 @@ export function TEUIHeroNumber({
 
   const colorClass = getPerformanceColor(value, benchmarkMax);
   const progressPercent = Math.min((value / benchmarkMax) * 100, 100);
-  const performanceLabel = getPerformanceLabel(value, averageValue);
+  const diff = ((averageValue - value) / averageValue) * 100;
   const isBetter = value < averageValue;
+
+  const performanceLabel =
+    diff > 0
+      ? t('results.betterThanAverage', { value: diff.toFixed(0) })
+      : diff < 0
+        ? t('results.aboveAverage', { value: Math.abs(diff).toFixed(0) })
+        : t('results.atAverage');
 
   return (
     <div
       className="flex flex-col items-center gap-3 py-6"
       role="region"
-      aria-label="Calculation results"
+      aria-label={t('results.calcResults')}
       aria-live="polite"
     >
       {/* Label */}
@@ -115,7 +117,7 @@ export function TEUIHeroNumber({
         </div>
         <div className="mt-1 flex justify-between text-xs text-text-tertiary">
           <span>0</span>
-          <span>{progressPercent.toFixed(0)}% of code max</span>
+          <span>{t('results.percentOfCodeMax', { value: progressPercent.toFixed(0) })}</span>
           <span>{benchmarkMax}</span>
         </div>
       </div>

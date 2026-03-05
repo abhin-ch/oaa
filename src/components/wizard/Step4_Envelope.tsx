@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/store/project';
 import { useUIStore } from '@/store/ui';
 import type { EnvelopeWall, EnvelopeWindow, CardinalDirection } from '@/schema/building';
@@ -8,12 +9,13 @@ import type { EnvelopeWall, EnvelopeWindow, CardinalDirection } from '@/schema/b
 const directions: CardinalDirection[] = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 
 const presets = [
-  { label: 'Code Minimum', wallU: 0.315, roofU: 0.183, windowU: 2.0, shgc: 0.4, ach: 3.0 },
-  { label: 'High Performance', wallU: 0.2, roofU: 0.12, windowU: 1.4, shgc: 0.35, ach: 1.5 },
-  { label: 'Passive House', wallU: 0.1, roofU: 0.08, windowU: 0.8, shgc: 0.5, ach: 0.6 },
+  { key: 'presetCodeMin', wallU: 0.315, roofU: 0.183, windowU: 2.0, shgc: 0.4, ach: 3.0 },
+  { key: 'presetHighPerf', wallU: 0.2, roofU: 0.12, windowU: 1.4, shgc: 0.35, ach: 1.5 },
+  { key: 'presetPassive', wallU: 0.1, roofU: 0.08, windowU: 0.8, shgc: 0.5, ach: 0.6 },
 ];
 
 export function Step4Envelope() {
+  const t = useTranslations();
   const { building, updateBuilding } = useProjectStore();
   const { nextStep, prevStep } = useUIStore();
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -62,23 +64,23 @@ export function Step4Envelope() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold text-text-primary">Envelope</h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Define your building&apos;s thermal envelope — walls, roof, windows, and air tightness.
-        </p>
+        <h2 className="text-2xl font-semibold text-text-primary">{t('wizard.step4.title')}</h2>
+        <p className="mt-1 text-sm text-text-secondary">{t('wizard.step4.description')}</p>
       </div>
 
       {/* Presets */}
       <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium text-text-secondary">Quick Presets</span>
+        <span className="text-sm font-medium text-text-secondary">
+          {t('wizard.step4.quickPresets')}
+        </span>
         <div className="flex flex-wrap gap-2">
           {presets.map((preset) => (
             <button
-              key={preset.label}
+              key={preset.key}
               onClick={() => applyPreset(preset)}
               className="rounded-lg border border-border-default px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-energy-400 hover:bg-energy-50 hover:text-energy-700"
             >
-              {preset.label}
+              {t(`wizard.step4.${preset.key}` as Parameters<typeof t>[0])}
             </button>
           ))}
         </div>
@@ -87,7 +89,8 @@ export function Step4Envelope() {
       {/* Roof U-value */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="roof-u" className="text-sm font-medium text-text-secondary">
-          Roof U-value <span className="text-xs text-text-tertiary">(W/m²·K)</span>
+          {t('wizard.step4.roofULabel')}{' '}
+          <span className="text-xs text-text-tertiary">({t('units.wPerM2K')})</span>
         </label>
         <input
           id="roof-u"
@@ -103,7 +106,7 @@ export function Step4Envelope() {
               },
             })
           }
-          placeholder="e.g. 0.183"
+          placeholder={t('wizard.step4.roofUPlaceholder')}
           className="h-11 rounded-lg border border-border-default bg-bg-surface px-3.5 text-base text-text-primary placeholder:text-text-tertiary transition-colors focus:border-energy-400 focus:outline-none focus:ring-3 focus:ring-energy-100"
         />
       </div>
@@ -112,7 +115,8 @@ export function Step4Envelope() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <label htmlFor="ach" className="text-sm font-medium text-text-secondary">
-            Airtightness <span className="text-xs text-text-tertiary">(ACH @ 50 Pa)</span>
+            {t('wizard.step4.airtightnessLabel')}{' '}
+            <span className="text-xs text-text-tertiary">({t('units.ach')} @ 50 Pa)</span>
           </label>
           <span className="font-mono text-sm font-medium tabular-nums text-text-primary">
             {building.envelope.airtightnessACH.toFixed(1)}
@@ -129,8 +133,8 @@ export function Step4Envelope() {
           className="h-2 w-full cursor-pointer appearance-none rounded-full bg-bg-sunken accent-energy-400"
         />
         <div className="flex justify-between text-xs text-text-tertiary">
-          <span>Passive House (0.3)</span>
-          <span>Leaky (10.0)</span>
+          <span>{t('wizard.step4.airtightnessPassive')}</span>
+          <span>{t('wizard.step4.airtightnessLeaky')}</span>
         </div>
       </div>
 
@@ -139,19 +143,19 @@ export function Step4Envelope() {
         onClick={() => setShowAdvanced(!showAdvanced)}
         className="text-left text-sm font-medium text-energy-600 hover:text-energy-700"
       >
-        {showAdvanced ? '▾ Hide' : '▸ Show'} advanced wall & window details
+        {showAdvanced ? '▾' : '▸'}{' '}
+        {showAdvanced ? t('wizard.step4.hideAdvanced') : t('wizard.step4.showAdvanced')}
       </button>
 
       {showAdvanced && (
         <div className="flex flex-col gap-4 rounded-lg border border-border-default bg-bg-raised p-4">
-          <p className="text-xs text-text-tertiary">
-            Add individual wall and window sections with orientation. For a quick estimate, one
-            entry per orientation is usually sufficient.
-          </p>
+          <p className="text-xs text-text-tertiary">{t('wizard.step4.advancedHint')}</p>
 
           {/* Walls */}
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-text-secondary">Walls</span>
+            <span className="text-sm font-medium text-text-secondary">
+              {t('wizard.step4.wallsLabel')}
+            </span>
             {building.envelope.walls.map((wall, i) => (
               <div key={i} className="flex gap-2">
                 <input
@@ -162,7 +166,7 @@ export function Step4Envelope() {
                     walls[i] = { ...wall, areaM2: Number(e.target.value) || 0 };
                     updateBuilding({ envelope: { ...building.envelope, walls } });
                   }}
-                  placeholder="Area m²"
+                  placeholder={t('wizard.step4.areaPlaceholder')}
                   className="h-9 w-24 rounded border border-border-default bg-bg-surface px-2 text-sm"
                 />
                 <input
@@ -173,7 +177,7 @@ export function Step4Envelope() {
                     walls[i] = { ...wall, uValue: Number(e.target.value) || 0 };
                     updateBuilding({ envelope: { ...building.envelope, walls } });
                   }}
-                  placeholder="U-value"
+                  placeholder={t('wizard.step4.uValuePlaceholder')}
                   className="h-9 w-24 rounded border border-border-default bg-bg-surface px-2 text-sm"
                 />
                 <select
@@ -203,13 +207,15 @@ export function Step4Envelope() {
               }}
               className="text-sm text-energy-600 hover:text-energy-700"
             >
-              + Add wall section
+              + {t('wizard.step4.addWall')}
             </button>
           </div>
 
           {/* Windows */}
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-text-secondary">Windows</span>
+            <span className="text-sm font-medium text-text-secondary">
+              {t('wizard.step4.windowsLabel')}
+            </span>
             {building.envelope.windows.map((win, i) => (
               <div key={i} className="flex gap-2">
                 <input
@@ -220,7 +226,7 @@ export function Step4Envelope() {
                     windows[i] = { ...win, areaM2: Number(e.target.value) || 0 };
                     updateBuilding({ envelope: { ...building.envelope, windows } });
                   }}
-                  placeholder="Area m²"
+                  placeholder={t('wizard.step4.areaPlaceholder')}
                   className="h-9 w-24 rounded border border-border-default bg-bg-surface px-2 text-sm"
                 />
                 <input
@@ -231,7 +237,7 @@ export function Step4Envelope() {
                     windows[i] = { ...win, uValue: Number(e.target.value) || 0 };
                     updateBuilding({ envelope: { ...building.envelope, windows } });
                   }}
-                  placeholder="U-value"
+                  placeholder={t('wizard.step4.uValuePlaceholder')}
                   className="h-9 w-20 rounded border border-border-default bg-bg-surface px-2 text-sm"
                 />
                 <input
@@ -242,7 +248,7 @@ export function Step4Envelope() {
                     windows[i] = { ...win, shgc: Number(e.target.value) || 0 };
                     updateBuilding({ envelope: { ...building.envelope, windows } });
                   }}
-                  placeholder="SHGC"
+                  placeholder={t('wizard.step4.shgcPlaceholder')}
                   className="h-9 w-20 rounded border border-border-default bg-bg-surface px-2 text-sm"
                 />
                 <select
@@ -272,7 +278,7 @@ export function Step4Envelope() {
               }}
               className="text-sm text-energy-600 hover:text-energy-700"
             >
-              + Add window section
+              + {t('wizard.step4.addWindow')}
             </button>
           </div>
         </div>
@@ -284,13 +290,13 @@ export function Step4Envelope() {
           onClick={prevStep}
           className="rounded-lg border border-border-default px-5 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-bg-raised"
         >
-          ← Back
+          &larr; {t('common.back')}
         </button>
         <button
           onClick={nextStep}
           className="rounded-lg bg-energy-400 px-5 py-2.5 text-sm font-medium text-text-primary transition-all hover:brightness-105 active:scale-[0.98]"
         >
-          Next →
+          {t('common.next')} &rarr;
         </button>
       </div>
     </div>
