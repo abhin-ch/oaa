@@ -8,7 +8,7 @@ import { BenchmarkBars } from './BenchmarkBars';
 import { calculateTEUI2 } from '@/engine/teui2';
 import { isValidForTEUI1, isValidForTEUI3 } from '@/schema/building';
 import { calculateTEUI3 } from '@/engine/teui3';
-import { getBenchmark, compareToNationalAverage } from '@/engine/shared/benchmarks';
+import { getBenchmark } from '@/engine/shared/benchmarks';
 
 /**
  * Live results panel — shown in the right 60% on desktop.
@@ -57,8 +57,6 @@ export function LiveResultsPanel() {
 
   const benchmark = getBenchmark('NECB', building.occupancy.type);
   const benchmarkMax = benchmark?.teui ?? 198;
-  const { percentOfAverage } = compareToNationalAverage(results.teui, building.occupancy.type);
-
   const benchmarks = [
     {
       label: t('results.benchmarks') + ' — ' + t('meta.appName'),
@@ -66,8 +64,8 @@ export function LiveResultsPanel() {
       color: '#fbbf24',
       isUser: true,
     },
-    { label: 'NECB', value: benchmarkMax, color: '#94a3b8' },
-    { label: 'Passive House', value: 45, color: '#2dd4bf' },
+    { label: t('results.codeMaximum'), value: benchmarkMax, color: '#94a3b8' },
+    { label: t('results.passiveHouse'), value: 45, color: '#2dd4bf' },
   ];
 
   return (

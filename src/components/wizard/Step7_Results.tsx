@@ -64,10 +64,10 @@ export function Step7Results() {
   const benchmarks = [
     { label: t('results.teuiLabel'), value: teui, color: '#fbbf24', isUser: true },
     ...(results?.referenceTeui != null
-      ? [{ label: 'Reference (Code)', value: results.referenceTeui, color: '#94a3b8' }]
+      ? [{ label: t('results.referenceCode'), value: results.referenceTeui, color: '#94a3b8' }]
       : []),
-    { label: 'NECB', value: benchmarkMax, color: '#cbd5e1' },
-    { label: 'Passive House', value: 45, color: '#2dd4bf' },
+    { label: t('results.codeMaximum'), value: benchmarkMax, color: '#cbd5e1' },
+    { label: t('results.passiveHouse'), value: 45, color: '#2dd4bf' },
   ];
 
   return (

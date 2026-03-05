@@ -1,8 +1,9 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import * as d3 from 'd3';
-import { sankey, sankeyLinkHorizontal, type SankeyGraph } from 'd3-sankey';
+import { sankey, sankeyLinkHorizontal } from 'd3-sankey';
 import type { SankeyData } from '@/engine/shared/types';
 
 interface SankeyDiagramProps {
@@ -19,15 +20,6 @@ interface SankeyNodeDatum {
   index?: number;
   x0?: number;
   x1?: number;
-  y0?: number;
-  y1?: number;
-}
-
-interface SankeyLinkDatum {
-  source: string | SankeyNodeDatum;
-  target: string | SankeyNodeDatum;
-  value: number;
-  width?: number;
   y0?: number;
   y1?: number;
 }
@@ -52,6 +44,7 @@ const NODE_COLORS: Record<string, string> = {
  * Shows energy sources flowing through to losses and gains.
  */
 export function SankeyDiagram({ data, width = 600, height = 400 }: SankeyDiagramProps) {
+  const t = useTranslations();
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -143,7 +136,7 @@ export function SankeyDiagram({ data, width = 600, height = 400 }: SankeyDiagram
   if (data.nodes.length === 0) {
     return (
       <div className="flex h-48 items-center justify-center rounded-lg bg-bg-raised text-sm text-text-tertiary">
-        No energy flow data available
+        {t('results.noSankeyData')}
       </div>
     );
   }
@@ -154,7 +147,7 @@ export function SankeyDiagram({ data, width = 600, height = 400 }: SankeyDiagram
       className="w-full"
       style={{ maxHeight: height }}
       role="img"
-      aria-label="Energy flow Sankey diagram"
+      aria-label={t('results.sankeyAriaLabel')}
     />
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { use } from 'react';
 import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/store/project';

@@ -48,7 +48,10 @@ export default function ProjectListPage() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col px-4 py-12 md:px-6">
+    <main
+      id="main-content"
+      className="mx-auto flex min-h-screen max-w-2xl flex-col px-4 py-12 md:px-6"
+    >
       {/* Header */}
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold tracking-tight text-text-primary">{t('meta.appName')}</h1>

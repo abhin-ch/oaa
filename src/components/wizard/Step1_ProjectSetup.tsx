@@ -112,8 +112,12 @@ export function Step1ProjectSetup() {
         />
         {climateStatus ? (
           <p className="text-xs text-success-600">
-            Climate data loaded: {climateStatus} (HDD: {building.climate.hddC}, CDD:{' '}
-            {building.climate.cddC}, Zone: {building.climate.zone})
+            {t('wizard.step1.climateLoaded', {
+              location: climateStatus,
+              hdd: building.climate.hddC,
+              cdd: building.climate.cddC,
+              zone: building.climate.zone,
+            })}
           </p>
         ) : (
           <p className="text-xs text-text-tertiary">{t('wizard.step1.climateHint')}</p>
