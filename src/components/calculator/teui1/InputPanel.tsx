@@ -1,19 +1,25 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import type { Building } from '@/schema/building';
+import type { TEUI1Result } from '@/engine/teui1';
 import { BuildingTab } from './inputs/BuildingTab';
 import { EnergyBillsTab } from './inputs/EnergyBillsTab';
 import { RenewablesTab } from './inputs/RenewablesTab';
 import { ProjectTab } from './inputs/ProjectTab';
+import { DownloadTab } from './inputs/DownloadTab';
+import { ReportPreview } from './results/ReportPreview';
 
 interface InputPanelProps {
   building: Building;
+  result: TEUI1Result;
   onUpdate: (changes: Partial<Building>) => void;
+  onTabChange?: (tab: string) => void;
+  reportRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-const TABS = ['building', 'energy', 'renewables', 'project'] as const;
+const TABS = ['building', 'energy', 'renewables', 'project', 'download'] as const;
 type TabKey = (typeof TABS)[number];
 
 const TAB_ICONS: Record<TabKey, React.ReactNode> = {
@@ -77,37 +83,78 @@ const TAB_ICONS: Record<TabKey, React.ReactNode> = {
       <path d="M16 2v4M8 2v4M3 10h18" />
     </svg>
   ),
+  download: (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+  ),
 };
 
-export function InputPanel({ building, onUpdate }: InputPanelProps) {
+export function InputPanel({
+  building,
+  result,
+  onUpdate,
+  onTabChange,
+  reportRef,
+}: InputPanelProps) {
   const t = useTranslations('teui1.tabs');
   const [activeTab, setActiveTab] = useState<TabKey>('building');
+
+  const handleTabChange = useCallback(
+    (tab: TabKey) => {
+      setActiveTab(tab);
+      onTabChange?.(tab);
+    },
+    [onTabChange],
+  );
   const formRef = useRef<HTMLFormElement>(null);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key !== 'Enter') return;
-      e.preventDefault();
+  const shouldFocusFirst = useRef(false);
+
+  // Auto-focus the first input when tab switches via Enter key
+  useEffect(() => {
+    if (!shouldFocusFirst.current) return;
+    shouldFocusFirst.current = false;
+    // Small timeout to let React render the new tab content
+    const timer = setTimeout(() => {
       const form = formRef.current;
       if (!form) return;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const inputs = Array.from(
-        (form as any).querySelectorAll('input, select, textarea'),
-      ) as HTMLElement[];
-      const target = e.target as HTMLElement;
-      const idx = inputs.indexOf(target);
-      if (idx >= 0 && idx < inputs.length - 1) {
-        inputs[idx + 1].focus();
-      } else if (idx === inputs.length - 1) {
-        const tabIdx = TABS.indexOf(activeTab);
-        const nextTab = TABS[tabIdx + 1];
-        if (nextTab) {
-          setActiveTab(nextTab);
-        }
+      const first = form.querySelector<HTMLElement>('input, select, textarea');
+      if (first) first.focus();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const form = formRef.current;
+    if (!form) return;
+    const inputs = Array.from(form.querySelectorAll<HTMLElement>('input, select, textarea'));
+    const target = e.target as HTMLElement;
+    const idx = inputs.indexOf(target);
+    if (idx >= 0 && idx < inputs.length - 1) {
+      inputs[idx + 1].focus();
+    } else if (idx === inputs.length - 1) {
+      const tabIdx = TABS.indexOf(activeTab);
+      const nextTab = TABS[tabIdx + 1];
+      if (nextTab) {
+        shouldFocusFirst.current = true;
+        handleTabChange(nextTab);
       }
-    },
-    [activeTab],
-  );
+    }
+  };
 
   return (
     <div className="flex h-full flex-col md:flex-row">
@@ -116,7 +163,7 @@ export function InputPanel({ building, onUpdate }: InputPanelProps) {
         {TABS.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabChange(tab)}
             className={`group relative flex h-14 w-full flex-col items-center justify-center gap-0.5 transition-all ${
               activeTab === tab
                 ? 'bg-bg-surface text-text-primary'
@@ -138,7 +185,7 @@ export function InputPanel({ building, onUpdate }: InputPanelProps) {
       </div>
 
       {/* Tab content */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="scrollbar-hide min-h-0 flex-1 overflow-y-auto">
         {/* Tab header */}
         <div className="border-b border-border-default px-4 py-2.5 md:px-5">
           <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">
@@ -157,6 +204,15 @@ export function InputPanel({ building, onUpdate }: InputPanelProps) {
           {activeTab === 'renewables' && <RenewablesTab building={building} onUpdate={onUpdate} />}
           {activeTab === 'project' && <ProjectTab building={building} onUpdate={onUpdate} />}
         </form>
+        {activeTab === 'download' && (
+          <div className="px-4 pb-4 pt-4 md:px-5">
+            <DownloadTab building={building} result={result} />
+            {/* Mobile: inline report preview below actions */}
+            <div className="mt-5 md:hidden">
+              <ReportPreview ref={reportRef} building={building} result={result} inline />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Mobile: Bottom nav bar (hidden on desktop) */}
@@ -164,7 +220,7 @@ export function InputPanel({ building, onUpdate }: InputPanelProps) {
         {TABS.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabChange(tab)}
             className={`group relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2 transition-all ${
               activeTab === tab ? 'text-text-primary' : 'text-text-tertiary'
             }`}

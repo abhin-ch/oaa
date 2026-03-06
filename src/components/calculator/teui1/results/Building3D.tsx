@@ -10,10 +10,11 @@ interface Building3DProps {
 
 export function Building3D({ occupancy, area, hasEnergy }: Building3DProps) {
   const s = Math.min(1, Math.max(0.6, area / 5000));
+  const h = BUILDING_HEIGHTS[occupancy] ?? BUILDING_HEIGHTS.residential;
 
   return (
     <div className="building-scene" style={{ transform: `scale(${0.7 + s * 0.3})` }}>
-      <div className="building-container">
+      <div className="building-container" style={{ height: h }}>
         <BuildingPreset type={occupancy} hasEnergy={hasEnergy} />
       </div>
     </div>
@@ -125,6 +126,16 @@ function Volume({
 /* ------------------------------------------------
    Building presets — one per occupancy type
    ------------------------------------------------ */
+const BUILDING_HEIGHTS: Record<string, number> = {
+  office: 350,
+  residential: 212,
+  retail: 100,
+  assembly: 228,
+  institutional: 264,
+  industrial: 186,
+  mixed: 330,
+};
+
 function BuildingPreset({ type, hasEnergy }: { type: OccupancyType; hasEnergy: boolean }) {
   switch (type) {
     case 'office':

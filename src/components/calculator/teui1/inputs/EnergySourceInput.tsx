@@ -40,6 +40,7 @@ export function EnergySourceInput({
         <Input
           id={id}
           type="number"
+          inputMode="decimal"
           min={0}
           step="any"
           value={value || ''}

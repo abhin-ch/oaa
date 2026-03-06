@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import { motion, useReducedMotion } from 'framer-motion';
+
 import { useProjectStore } from '@/store/project';
 import { useUIStore } from '@/store/ui';
 import { useRouter } from '@/i18n/navigation';
@@ -13,6 +13,7 @@ import { SaveCalculationModal } from '@/components/calculator/SaveCalculationMod
 import { DotGrid } from '@/components/layout/DotGrid';
 import { InputPanel } from './InputPanel';
 import { ResultsPanel } from './results/ResultsPanel';
+import { ReportPreview } from './results/ReportPreview';
 
 function createFreshDraft(building: Building): Building {
   return {
@@ -32,8 +33,8 @@ export function TEUI1Calculator() {
   const { activeSavedCalcId, setActiveSavedCalcId } = useUIStore();
   const [showResults, setShowResults] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
-
+  const [activeInputTab, setActiveInputTab] = useState('building');
+  const reportRef = useRef<HTMLDivElement>(null);
   const [draft, setDraft] = useState<Building | null>(null);
 
   useEffect(() => {
@@ -192,13 +193,13 @@ export function TEUI1Calculator() {
             flex: '1 1 0%',
             minHeight: 0,
             overflow: 'hidden',
-            padding: '0 1rem 0.5rem',
+            padding: '0 1rem 1.5rem',
             position: 'relative',
             zIndex: 1,
             display: 'flex',
             flexDirection: 'column',
           }}
-          className="md:!px-6 md:!pb-3"
+          className="md:!px-6 md:!pb-24"
         >
           {/* Mobile: toggle between Build / Results */}
           <div className="mb-2 flex shrink-0 md:hidden">
@@ -229,7 +230,7 @@ export function TEUI1Calculator() {
 
           {/* Mobile: full-screen single panel */}
           <div className="flex min-h-0 flex-1 flex-col border border-border-default bg-bg-base md:hidden">
-            {showResults ? (
+            {showResults && activeInputTab !== 'download' ? (
               <div style={{ flex: '1 1 0%', overflow: 'hidden', minHeight: 0 }}>
                 <ResultsPanel result={result} building={draft} />
               </div>
@@ -237,7 +238,13 @@ export function TEUI1Calculator() {
               <div
                 style={{ flex: '1 1 0%', minHeight: 0, display: 'flex', flexDirection: 'column' }}
               >
-                <InputPanel building={draft} onUpdate={updateDraft} />
+                <InputPanel
+                  building={draft}
+                  result={result}
+                  onUpdate={updateDraft}
+                  onTabChange={setActiveInputTab}
+                  reportRef={reportRef}
+                />
               </div>
             )}
           </div>
@@ -257,13 +264,23 @@ export function TEUI1Calculator() {
               style={{ overflowY: 'auto', minHeight: 0 }}
               className="border-r border-border-default"
             >
-              <InputPanel building={draft} onUpdate={updateDraft} />
+              <InputPanel
+                building={draft}
+                result={result}
+                onUpdate={updateDraft}
+                onTabChange={setActiveInputTab}
+                reportRef={reportRef}
+              />
             </div>
 
-            {/* Right panel */}
+            {/* Right panel — results or report preview */}
             <div style={{ minHeight: 0, overflow: 'hidden' }}>
               <div style={{ height: '100%', overflow: 'hidden' }}>
-                <ResultsPanel result={result} building={draft} />
+                {activeInputTab === 'download' ? (
+                  <ReportPreview ref={reportRef} building={draft} result={result} />
+                ) : (
+                  <ResultsPanel result={result} building={draft} />
+                )}
               </div>
             </div>
           </div>

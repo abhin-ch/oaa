@@ -178,7 +178,8 @@
       "building": "Building",
       "energy": "Energy",
       "renewables": "Renewables",
-      "project": "Project"
+      "project": "Project",
+      "download": "Download"
     },
     "building": {
       "typology": "Building Typology",
@@ -211,6 +212,20 @@
       "beginDate": "Evaluation Start Date",
       "endDate": "Evaluation End Date",
       "period": "Typically a 12-month evaluation period"
+    },
+    "download": {
+      "reportTitle": "TEUI Report",
+      "downloadPdf": "Download PDF",
+      "emailReport": "Email Report",
+      "emailPlaceholder": "recipient@example.com",
+      "emailSend": "Send Report",
+      "emailSent": "Report link copied!",
+      "preview": "Report Preview",
+      "buildingInfo": "Building Information",
+      "energyInputs": "Energy Inputs",
+      "renewableInputs": "Renewable Offsets",
+      "evaluationPeriod": "Evaluation Period",
+      "or": "or"
     },
     "results": {
       "title": "TEUI Score",

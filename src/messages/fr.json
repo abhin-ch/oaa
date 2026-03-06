@@ -178,7 +178,8 @@
       "building": "B\u00E2timent",
       "energy": "\u00C9nergie",
       "renewables": "Renouvelables",
-      "project": "Projet"
+      "project": "Projet",
+      "download": "T\u00E9l\u00E9charger"
     },
     "building": {
       "typology": "Typologie du b\u00E2timent",
@@ -211,6 +212,20 @@
       "beginDate": "Date de d\u00E9but d'\u00E9valuation",
       "endDate": "Date de fin d'\u00E9valuation",
       "period": "G\u00E9n\u00E9ralement une p\u00E9riode d'\u00E9valuation de 12 mois"
+    },
+    "download": {
+      "reportTitle": "Rapport TEUI",
+      "downloadPdf": "T\u00E9l\u00E9charger PDF",
+      "emailReport": "Envoyer par courriel",
+      "emailPlaceholder": "destinataire@exemple.com",
+      "emailSend": "Envoyer le rapport",
+      "emailSent": "Lien du rapport copi\u00E9 !",
+      "preview": "Aper\u00E7u du rapport",
+      "buildingInfo": "Informations du b\u00E2timent",
+      "energyInputs": "Donn\u00E9es \u00E9nerg\u00E9tiques",
+      "renewableInputs": "Compensations renouvelables",
+      "evaluationPeriod": "P\u00E9riode d'\u00E9valuation",
+      "or": "ou"
     },
     "results": {
       "title": "Score TEUI",
