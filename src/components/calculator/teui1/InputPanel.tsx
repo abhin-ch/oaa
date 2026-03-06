@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import type { Building } from '@/schema/building';
 import type { TEUI1Result } from '@/engine/teui1';
+import { hapticTap } from '@/lib/haptics';
 import { BuildingTab } from './inputs/BuildingTab';
 import { EnergyBillsTab } from './inputs/EnergyBillsTab';
 import { RenewablesTab } from './inputs/RenewablesTab';
@@ -115,6 +116,7 @@ export function InputPanel({
     (tab: TabKey) => {
       setActiveTab(tab);
       onTabChange?.(tab);
+      hapticTap();
     },
     [onTabChange],
   );
@@ -146,6 +148,7 @@ export function InputPanel({
     const idx = inputs.indexOf(target);
     if (idx >= 0 && idx < inputs.length - 1) {
       inputs[idx + 1].focus();
+      hapticTap();
     } else if (idx === inputs.length - 1) {
       const tabIdx = TABS.indexOf(activeTab);
       const nextTab = TABS[tabIdx + 1];

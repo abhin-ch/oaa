@@ -37,6 +37,7 @@ export function AreaInput({ valueM2, onChange }: AreaInputProps) {
           id={id}
           type="number"
           inputMode="decimal"
+          enterKeyHint="next"
           min={0}
           step="any"
           value={displayValue || ''}
