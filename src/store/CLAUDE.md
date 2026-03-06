@@ -2,55 +2,40 @@
 
 ## Purpose
 
-Zustand state management stores. These are the reactive layer between UI and data — components read from stores, dispatch updates, and the stores handle persistence.
+Zustand state management stores. Reactive layer between UI and data.
 
-## Structure
+## Files
 
-```
-store/
-├── project.ts    # Current project's Building data + CRUD operations
-└── ui.ts         # UI state (wizard step, theme, sidebar, modals)
-```
+- `project.ts` — Project CRUD, building data, saved calculations, IndexedDB persistence (via Dexie)
+- `ui.ts` — UI state: theme, locale, sidebar, active calculator tab
 
-## Design Rules
+## Key Patterns
 
-1. **Zustand with slices** — Each store is a standalone Zustand store. No monolithic global store.
-2. **Persistence middleware** — `project.ts` uses Zustand's `persist` middleware backed by IndexedDB (via Dexie adapter). Every change auto-saves.
-3. **Derived calculations live outside** — Stores hold raw Building data. TEUI calculations happen in `src/engine/` modules called from hooks or components, not inside the store.
-4. **Undo/redo** — `project.ts` maintains a state history stack for undo/redo of building data changes. Use Zustand's `temporal` middleware or a custom implementation.
-5. **Immutable updates** — Use Immer (via Zustand middleware) or spread patterns. Never mutate state directly.
-
-## Store: `project.ts`
-
-- `building: Building` — The current project data
-- `projects: BuildingSummary[]` — List of all saved projects (id, name, updatedAt)
-- Actions: `createProject()`, `loadProject(id)`, `updateBuilding(partial)`, `deleteProject(id)`
-- `undo()` / `redo()` — State history navigation
-- Auto-persists to IndexedDB on every change
-
-## Store: `ui.ts`
-
-- `currentStep: number` — Active wizard step (1–7)
-- `theme: 'light' | 'dark' | 'system'`
-- `sidebarOpen: boolean`
-- `locale: 'en' | 'fr'` — Current language (synced with next-intl)
-- Actions: `setStep()`, `nextStep()`, `prevStep()`, `setTheme()`, `toggleSidebar()`
+- **Zustand + Immer** — Immutable state updates via Immer middleware in project store
+- **No persist middleware** — Manual IndexedDB sync via Dexie (not Zustand persist)
+- **Derived calculations outside** — Stores hold raw data; TEUI calculations run in hooks/engine
+- **Saved calculations** — `project.ts` manages per-project saved calculation snapshots with timestamps
 
 ## Data Flow
 
 ```
-User Input → Component → store.updateBuilding({ envelope: ... })
-                              ↓ (auto-persist to IndexedDB)
-                         Zustand notifies subscribers
-                              ↓
-                         Component re-renders → calls engine.calculateTEUI(building)
-                              ↓
-                         Results displayed
+User Input -> Component -> store.updateBuilding(partial)
+                               | (auto-saves to IndexedDB)
+                          Zustand notifies subscribers
+                               |
+                          Component re-renders -> useTEUI1(building) -> engine
+                               |
+                          Results displayed
 ```
 
-## Status
+## Store: project.ts
 
-- [ ] Project store with CRUD + persistence
-- [ ] UI store (wizard navigation, theme)
-- [ ] Undo/redo middleware
-- [ ] IndexedDB persistence adapter
+- `building: Building | null` — Currently loaded project
+- `projects: BuildingSummary[]` — All project summaries
+- Actions: `createProject`, `loadProject`, `updateBuilding`, `deleteProject`, `archiveProject`
+- Saved calculations: `saveCalculation`, `updateSavedCalculation`, `deleteSavedCalculation`
+
+## Store: ui.ts
+
+- `theme`, `locale`, `sidebarOpen`, `activeCalculatorTab`
+- Actions: `setTheme`, `setLocale`, `toggleSidebar`, `setActiveCalculatorTab`

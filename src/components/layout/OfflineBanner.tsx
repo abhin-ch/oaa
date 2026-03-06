@@ -13,8 +13,8 @@ export function OfflineBanner() {
     <div
       role="status"
       aria-live="polite"
-      className={`fixed top-0 left-0 right-0 z-[60] flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors ${
-        isOnline ? 'bg-success-100 text-success-700' : 'bg-warning-100 text-warning-700'
+      className={`flex items-center justify-center px-4 py-1.5 text-xs font-medium ${
+        isOnline ? 'bg-bg-raised text-text-secondary' : 'bg-bg-sunken text-text-secondary'
       }`}
     >
       {isOnline ? t('common.backOnline') : t('common.offline')}

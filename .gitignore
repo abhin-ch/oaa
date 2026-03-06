@@ -19,6 +19,11 @@ playwright-report/
 .DS_Store
 Thumbs.db
 
+# serwist service worker (generated at build time)
+public/sw.js
+public/sw.js.map
+public/swe-worker-*.js
+
 # env
 .env
 .env.local

@@ -1,91 +1,146 @@
-/**
- * Unit tests for src/engine/teui1.ts
- */
-
 import { describe, it, expect } from 'vitest';
-import { calculateTEUI1 } from '@/engine/teui1';
-import { gasM3ToKwh, oilLToKwh, woodM3ToKwh } from '@/engine/shared/units';
 import {
-  createSimpleResidential,
-  createMultiFuel,
-  createZeroArea,
-  createNoEnergy,
-} from './fixtures/buildings';
+  calculateTEUI1,
+  ft2ToM2,
+  m2ToFt2,
+  GAS_M3_TO_KWH,
+  PROPANE_LBS_TO_KWH,
+  OIL_L_TO_KWH,
+  BIOFUEL_M3_TO_KWH,
+} from '@/engine/teui1';
+import { createEmptyBuilding } from '@/schema/building';
 
-describe('teui1 — calculateTEUI1', () => {
-  it('calculates TEUI for simple residential (electricity + gas)', () => {
-    const building = createSimpleResidential();
-    const result = calculateTEUI1(building);
+function makeBuilding(overrides: {
+  area?: number;
+  electricity?: number;
+  gas?: number;
+  propane?: number;
+  oil?: number;
+  biofuel?: number;
+  onSite?: number;
+  offSiteElec?: number;
+  offSiteGas?: number;
+}) {
+  const b = createEmptyBuilding('test-id');
+  b.energySources = {
+    conditionedAreaM2: overrides.area,
+    electricityKwh: overrides.electricity,
+    naturalGasM3: overrides.gas,
+    propaneLbs: overrides.propane,
+    heatingOilL: overrides.oil,
+    biofuelM3: overrides.biofuel,
+  };
+  b.renewables = {
+    onSiteKwh: overrides.onSite,
+    offSiteElectricityKwh: overrides.offSiteElec,
+    offSiteGasKwh: overrides.offSiteGas,
+  };
+  return b;
+}
 
-    // 20000 kWh + 2000 m3 * 10.3321 = 20000 + 20664.2 = 40664.2 kWh
-    const expectedTotal = 20000 + gasM3ToKwh(2000);
-    expect(result.totalEnergyKwh).toBeCloseTo(expectedTotal, 1);
-
-    // TEUI = 40664.2 / 1000 = 40.664
-    expect(result.teui).toBeCloseTo(expectedTotal / 1000, 2);
-  });
-
-  it('calculates TEUI for multi-fuel building', () => {
-    const building = createMultiFuel();
-    const result = calculateTEUI1(building);
-
-    const expectedTotal = 10000 + gasM3ToKwh(1000) + oilLToKwh(500) + woodM3ToKwh(2);
-    expect(result.totalEnergyKwh).toBeCloseTo(expectedTotal, 1);
-    expect(result.teui).toBeCloseTo(expectedTotal / 500, 2);
-  });
-
-  it('breakdown contains correct per-source kWh', () => {
-    const building = createMultiFuel();
-    const result = calculateTEUI1(building);
-
-    expect(result.breakdown.electricityKwh).toBe(10000);
-    expect(result.breakdown.gasKwh).toBeCloseTo(gasM3ToKwh(1000), 2);
-    expect(result.breakdown.oilKwh).toBeCloseTo(oilLToKwh(500), 2);
-    expect(result.breakdown.woodKwh).toBe(woodM3ToKwh(2));
-  });
-
-  it('GHGI is positive for a building with gas', () => {
-    const building = createSimpleResidential();
-    const result = calculateTEUI1(building);
-    expect(result.ghgi).toBeGreaterThan(0);
-  });
-
-  it('returns zero TEUI for zero area', () => {
-    const building = createZeroArea();
-    const result = calculateTEUI1(building);
-    expect(result.teui).toBe(0);
-    expect(result.ghgi).toBe(0);
-    // Total energy should still be calculated
-    expect(result.totalEnergyKwh).toBe(10000);
-  });
-
-  it('returns zero for building with no energy', () => {
-    const building = createNoEnergy();
-    const result = calculateTEUI1(building);
+describe('calculateTEUI1', () => {
+  it('returns zero result when area is 0', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 0, electricity: 10000 }));
     expect(result.teui).toBe(0);
     expect(result.totalEnergyKwh).toBe(0);
-    expect(result.ghgi).toBe(0);
   });
 
-  it('handles electricity-only building', () => {
-    const building = createSimpleResidential();
-    building.energySources.gasM3 = 0;
-    const result = calculateTEUI1(building);
-    expect(result.teui).toBe(20); // 20000 / 1000
-    expect(result.breakdown.gasKwh).toBe(0);
+  it('returns zero result when area is undefined', () => {
+    const result = calculateTEUI1(makeBuilding({ electricity: 10000 }));
+    expect(result.teui).toBe(0);
   });
 
-  it('matches research.md example calculation', () => {
-    // research.md example: 20,000 kWh electricity + 10,000 m3 gas, 1000 m2
-    // Gas: 10000 * 10.3321 = 103321 kWh
-    // Total: 20000 + 103321 = 123321 kWh
-    // TEUI = 123321 / 1000 = 123.321
-    const building = createSimpleResidential();
-    building.energySources.electricityKwh = 20000;
-    building.energySources.gasM3 = 10000;
-    building.geometry.conditionedAreaM2 = 1000;
+  it('calculates TEUI for electricity only', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, electricity: 10000 }));
+    expect(result.teui).toBe(100); // 10000 / 100
+    expect(result.totalEnergyKwh).toBe(10000);
+    expect(result.netEnergyKwh).toBe(10000);
+  });
 
-    const result = calculateTEUI1(building);
-    expect(result.teui).toBeCloseTo(123.321, 0);
+  it('converts natural gas m3 to kWh', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, gas: 100 }));
+    expect(result.totalEnergyKwh).toBeCloseTo(100 * GAS_M3_TO_KWH);
+    expect(result.teui).toBeCloseTo(GAS_M3_TO_KWH); // 1027.64 / 100
+  });
+
+  it('converts propane lbs to kWh', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, propane: 100 }));
+    expect(result.totalEnergyKwh).toBeCloseTo(100 * PROPANE_LBS_TO_KWH);
+  });
+
+  it('converts heating oil L to kWh', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, oil: 100 }));
+    expect(result.totalEnergyKwh).toBeCloseTo(100 * OIL_L_TO_KWH);
+  });
+
+  it('converts biofuel m3 to kWh', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, biofuel: 1 }));
+    expect(result.totalEnergyKwh).toBeCloseTo(BIOFUEL_M3_TO_KWH);
+  });
+
+  it('sums multiple energy sources', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, electricity: 5000, gas: 100 }));
+    const expectedTotal = 5000 + 100 * GAS_M3_TO_KWH;
+    expect(result.totalEnergyKwh).toBeCloseTo(expectedTotal);
+    expect(result.teui).toBeCloseTo(expectedTotal / 100);
+  });
+
+  it('subtracts renewables from net energy', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, electricity: 10000, onSite: 2000 }));
+    expect(result.netEnergyKwh).toBe(8000);
+    expect(result.teui).toBe(80);
+    expect(result.renewablesKwh).toBe(2000);
+  });
+
+  it('sums all renewable sources', () => {
+    const result = calculateTEUI1(
+      makeBuilding({
+        area: 100,
+        electricity: 10000,
+        onSite: 1000,
+        offSiteElec: 500,
+        offSiteGas: 500,
+      }),
+    );
+    expect(result.renewablesKwh).toBe(2000);
+    expect(result.teui).toBe(80);
+  });
+
+  it('clamps gradient position to 0-99', () => {
+    // Very high TEUI
+    const high = calculateTEUI1(makeBuilding({ area: 1, electricity: 100000 }));
+    expect(high.gradientPosition).toBeLessThanOrEqual(99);
+
+    // Zero TEUI
+    const zero = calculateTEUI1(makeBuilding({ area: 100 }));
+    expect(zero.gradientPosition).toBe(0);
+  });
+
+  it('produces breakdown with percentages summing to ~100', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, electricity: 5000, gas: 50 }));
+    expect(result.breakdown.length).toBeGreaterThan(0);
+    const totalPct = result.breakdown.reduce((s, b) => s + b.percentage, 0);
+    expect(totalPct).toBeCloseTo(100, 0);
+  });
+
+  it('calculates GHGI values', () => {
+    const result = calculateTEUI1(makeBuilding({ area: 100, electricity: 10000, gas: 100 }));
+    expect(result.ghgi.kgCo2PerM2).toBeGreaterThan(0);
+    expect(result.ghgi.mtCo2Total).toBeGreaterThan(0);
+  });
+
+  it('handles missing energySources gracefully', () => {
+    const b = createEmptyBuilding('test');
+    b.energySources = undefined;
+    const result = calculateTEUI1(b);
+    expect(result.teui).toBe(0);
+  });
+});
+
+describe('unit conversion', () => {
+  it('converts ft2 to m2 and back', () => {
+    const m2 = ft2ToM2(1076.4);
+    expect(m2).toBeCloseTo(100, 0);
+    expect(m2ToFt2(m2)).toBeCloseTo(1076.4, 0);
   });
 });

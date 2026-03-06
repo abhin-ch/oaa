@@ -1,0 +1,397 @@
+## OAA Brand & Identity
+
+## Cheat Sheet
+
+```
+What is Brand and Why Does it Matter?
+```
+The Ontario Association of Architects (OAA)
+is a self-regulating organization **dedicated** to
+serving the public interest while promoting and
+increasing the knowledge, skill, and proficiency
+of its members. It does so to **protect the users
+of architecture professionals’ services** by
+ensuring only qualified people are able to practise
+architecture in Ontario.
+
+Equity, Diversity, & Inclusion
+
+The OAA has a duty to ensure the profession
+responds to and reflects the diversity of people in
+Ontario. It strives to use inclusive language and
+visuals in all communications.
+
+Watch for harmful assumptions about:
+•	 Gender Identity, Gender Expression, Sex
+•	 Sexual Orientation
+•	 Race/Colour/Ancestry, Ethnic Origin,
+Nationality, Citizenship, Place of Origin
+•	 Language Proficiency
+•	 Religious Affiliation/Creed
+•	 Financial Status
+•	 Marital/Family Status
+•	 Physical/Cognitive Ability, Health Status
+•	 Education Status
+•	 Age
+Further information at P:\Brand+Identity\
+Additional Resources.
+
+The OAA is equally committed to providing
+accessible materials to all audiences. It
+continues to make updates and to apply any and
+all relevant accessibility standards. The OAA will
+provide materials in an alternate format upon
+request.
+
+```
+Corporate Name
+```
+```
+Vision, Values, Mandate, Strategic Priorities
+```
+```
+Our brand is the sum of impressions, beliefs, and expectations people have about our organization, our products, and
+our services. It is experienced across many touchpoints, and informed by how we look, what we say, and what we do.
+```
+```
+The OAA’s brand identity acknowledges and reflects the importance of clarity, creativity, and good design. Clean,
+minimal, and linear graphic elements – paired with a friendly and balanced approach to language – position the OAA as
+a trusted authority for the profession.
+```
+```
+The standards outlined in this document provide a consistent structure to our language and design. A strong, positive
+image and brand awareness depend on the successful application of these standards.
+```
+```
+The full corporate name is Ontario Association of Architects. Use it first and foremost for both written formats and
+for the logo. We also use the acronym OAA (no periods), which is to be introduced using brackets: Ontario Association
+of Architects (OAA). Once introduced, you can use OAA in other parts of your text. Repeat the full corporate name at
+intervals to maintain accessibility. You may also say “the Association.”
+```
+```
+While “the” must precede the corporate name in written form, it is not part of the official corporate name.
+```
+```
+Currently, the Ontario Association of Architects is not a bilingual organization. However, in instances where using the
+French name, Ordre des architectes de l’Ontario (OAO) is appropriate, the same rules as above apply. Note that in the
+French version, only “Ordre” and “Ontario” are capitalized. The acronym is also different ( OAO instead of OAA ).
+```
+```
+Vision : An Ontario in which architects are valued contributors to society, by creating a safe and healthy built
+environment that performs at the highest levels and elevates the human spirit.
+```
+```
+Values : Professional | Accountable | Transparent | Ethical
+```
+```
+Mandate : To regulate and govern the practice of architecture in Ontario in the service and protection of the public
+interest in accordance with the Architects Act, its Regulations and By-laws; to develop and uphold standards of skill,
+knowledge, qualification, practice, and professional ethics among architects; and, to promote the appreciation of
+architecture within the broader society.
+```
+```
+Strategic Priorities: Regulatory Leadership, Governance and Operations, Member Competency, and Public Education
+Strategic Themes: Climate Action | Equity, Diversity, and Inclusion
+```
+
+## OAA Logo
+
+```
+Full Logomark
+```
+The OAA Logo is the main visual identifier for the
+Ontario Association of Architects (OAA).
+
+The OAA logo epitomizes the broader visual style
+which is **clean, minimal,** and **linear**.
+
+Rules for Using the Logo Lockup and Symbol
+
+There are English, French, and Bilingual*
+versions of the logo lockup. For all versions, there
+are two sizes: standard size and small size. They
+are designed to perform best in different scales.
+(Please see the complete _OAA Brand & Identity
+Guidelines_ for details)
+
+*The bilingual logo lockup should only be used
+when both languages need to be represented.
+
+The logo symbol can be used on its own to
+represent the brand **if the full corporate name is
+clearly visible elsewhere**. Otherwise, please use
+the full logomark.
+
+The minimum amount of clear space that must
+be kept around the logo and logo symbol is equal
+to 1/4 the width of the logo symbol.
+
+**Do not separate or modify any single
+component from the logomark.**
+
+The logo can be used on different coloured
+backgrounds or photographs, but should always
+remain black or white and be clear and legible.
+
+```
+Logo Symbol
+```
+```
+x
+```
+```
+x = 1/4 of the symbol
+```
+```
+x
+```
+```
+x
+x
+```
+```
+x = 1/4 of the symbol
+```
+```
+x
+```
+```
+x = 1/4 of the symbol
+```
+```
+x
+```
+
+## Colours & Typography
+
+```
+Colours
+```
+The dominant brand colour is white which should
+be used mostly as a background colour paired
+with black type. It’s crisp, clean, and passes all
+accessibility requirements.
+
+Black should be used mainly for type.
+It should be used sparingly for background.
+
+When creating infographics or charts, and the
+brand colours are limiting, you can use shades
+of black in increments of 10%. Use other colours
+sparingly and opt for muted tones.
+
+For digital use, the colour contrasts need to be
+at least level AA according to the Web Content
+Accessibility Guidelines (WCAG).
+
+Primary and Alternate Typeface
+
+The primary typeface is Akkurat, used for the OAA
+logomark, the OAA website, the official letterhead
+footer, certificates, graphic designs, and official
+publications.
+
+The alternate typeface is Arial, to be used
+when Akkurat is not available. Arial has many
+applications including memos, internal reports,
+presentations, and other standard documents.
+
+Each typeface comes in multiple weights. Opt
+for regular, and use bold or light sparingly to
+create hierarchy. In most cases, hierarchy of
+information should be created with white space,
+instead of a variety of type sizes and weights.
+
+```
+Typeface - Akkurat (left) & Arial (right)
+```
+```
+Black
+RGB: 0/0/
+CMYK: 0/0/0/
+PMS: Black
+HEX: #
+```
+```
+Dark Grey
+RGB: 75/75/
+CMYK: 0/0/0/
+PMS: Cool Gray 11
+HEX: #4b4b4b
+```
+```
+Medium Grey
+RGB: 155/155/
+CMYK: 0/0/0/
+PMS: Cool Gray 7
+HEX: #9b9b9b
+```
+```
+Light Grey
+RGB: 230/230/
+CMYK: 0/0/0/
+PMS: Cool Gray 1
+HEX: #e6e6e
+```
+```
+White
+RGB: 255/255/
+CMYK: 0/0/0/
+PMS: White
+HEX: #ffffff
+```
+```
+100% 90% 80% 70% 60% 50% 40% 30% 20% 10%
+```
+### ABCDEFGHIJKLM
+
+### NOPQRSTUVWXYZ
+
+### abcdefghijklm
+
+### nopqrstuvwxyz
+
+### 1234567890
+
+# Rg
+
+### ABCDEFGHIJKLM
+
+### NOPQRSTUVWXYZ
+
+### abcdefghijklm
+
+### nopqrstuvwxyz
+
+### 1234567890
+
+# Rg
+
+
+## Formatting Standards
+
+```
+Accessibility Basics
+```
+The following is a snapshot of some basic
+formatting requirements. For full details, please
+consult the complete _OAA Brand & Identity
+Guidelines._
+
+```
+Using Microsoft Word
+```
+```
+These are general guidelines that can be adapted
+as appropriate to other word processors.
+Currently, OAA staff use Microsoft Word.
+```
+```
+A number of templates have been created
+following these general principles. They
+can be found at P:\Brand+Identity\
+Templates+Samples.
+```
+```
+Quick Tips for Using Microsoft Word Templates
+```
+```
+Please remember the following:
+```
+```
+•	 Use the accessibility features in Microsoft Word (Styles, Table of Contents, Paragraph spacing for white space);
+•	 Whenever possible, ensure to add alt-text on all images and/or tables used in documents and digital platforms;
+•	 Acronyms must be preceded by the full name, which should be repeated at intervals; use periods or spaces for
+acronyms in alt-text;
+•	 Closed captioning should be included on all new videos produced by the OAA;
+•	 Minimum font size for body text must be 10 pt;
+•	 Use plain language and “chunk” your content; avoid long strings of uninterrupted and dense content; and
+•	 Avoid placing text on images in a way that might obscure legibility.
+```
+```
+Please remember the following:
+```
+```
+•	Borders and Tables should be black or medium/dark grey, line weight 1/2 pt; use borders to create a line break;
+•	Use the Styles feature in your document and select appropriate headings from available options; multiple levels of
+headings should follow a logical descending order;
+•	Line spacing should be set to “Multiple” at 1.08 pt. Paragraphs should have a mimimum of 6 pt space after. Use
+paragraph spacing or a page break to create white space;
+•	Use the bullet and numbering library built into Word; choose the round black bullets as the highest level;
+•	Page margins should be set to “Narrow” (0.5 inches) all around your page; to achieve a 2/3 page paragraph width, set
+your right paragraph indentation to 2.25 inches;
+•	Styles can be pre-formatted and applied throughout a document to ensure accessibility and brand compliance.
+To avoid “mixing” styles between documents, when copying and pasting content, right click and select “Merge
+Formatting” from your paste options. This will override any imported style formatting; and
+•	Inches are the preferred units of measurement used in this guide and across OAA templates.
+```
+
+## Content Standards
+
+```
+Writing Style - Quick Tips
+```
+The following is a snapshot of some basic
+content requirements. For full details, please
+consult the complete _OAA Brand & Identity
+Guidelines._
+
+All representatives of the OAA must speak with a
+unified voice on behalf of the organization.
+
+The OAA is governed by the _Architects Act,_ which
+has specific and binding requirements. The
+content produced and disseminated by the OAA
+needs to reflect and uphold our duties therein.
+
+An inconsistent approach to messaging is at best
+confusing and at worst a liability.
+
+```
+Primary Language
+```
+```
+The majority of OAA communications are
+currently conducted in English.
+```
+```
+As language capabilities expand, relevant
+updates will be reflected in future versions of the
+OAA Brand & Identity Guidelines.
+```
+```
+Editorial Style
+```
+```
+Please remember the following:
+```
+```
+•	 Use simple phrasing and short sentence structure;
+•	 Organize content in “chunks” that are brief, to the point, and focused;
+•	 Use active rather than passive voice. (ex: “The dog ate the bone,” not “The bone was eaten by the dog.”);
+•	 Choose familiar, everyday words and explain technical or unfamiliar terms;
+•	 Be clear, unambiguous, and accurate;
+•	 Be succinct. Avoid excessive description or redundancy (ex: “The stairs are steep,” not “The stairs ascend at a highly
+challenging vertical incline.”);
+•	 Keep content relevant to your target audience(s); and
+•	 Tone should convey leadership and authority in a friendly and balanced way.
+```
+```
+Please remember the following:
+```
+```
+•	In general, the OAA follows Canadian Press Style; exceptions and special rules can be found in the complete OAA
+Brand & Identity Guidelines ;
+•	Always italicize the words Architects Act unless the rest of the sentence is italicized - then use regular;
+•	Use inclusive language and avoid binary pronouns or prefixes (i.e. he/she, Mr./Mrs./Ms.), unless known; and
+•	Refer to the complete guidelines for a Glossary of Terms.
+```
+#### The contents of this quick reference document offer a high level summary of the official OAA Brand & Identity Guidelines which are available at
+
+#### P:\Brand+Identity. Please consult the complete guidelines for further details.
+
+#### OAA Communications is the authority for OAA brand management, and all enquiries should be directed to Cynthia Mykytyshyn, Communications Specialist,
+
+#### at cynthiam@oaa.on.ca
+
+

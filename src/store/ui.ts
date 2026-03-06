@@ -4,11 +4,13 @@ export type Theme = 'light' | 'dark' | 'system';
 export type Locale = 'en' | 'fr';
 
 interface UIState {
-  // Wizard navigation
-  currentStep: number;
-  setStep: (step: number) => void;
-  nextStep: () => void;
-  prevStep: () => void;
+  // Active calculator within a project (null = browsing catalog)
+  activeCalculator: string | null;
+  setActiveCalculator: (id: string | null) => void;
+
+  // Saved calculation being edited (null = new calculation)
+  activeSavedCalcId: string | null;
+  setActiveSavedCalcId: (id: string | null) => void;
 
   // Theme
   theme: Theme;
@@ -22,25 +24,14 @@ interface UIState {
   sidebarOpen: boolean;
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
-
-  // Bottom sheet (mobile)
-  bottomSheetSnap: 'collapsed' | 'half' | 'full';
-  setBottomSheetSnap: (snap: 'collapsed' | 'half' | 'full') => void;
 }
 
-const TOTAL_STEPS = 7;
-
 export const useUIStore = create<UIState>()((set) => ({
-  currentStep: 1,
-  setStep: (step: number) => set({ currentStep: Math.max(1, Math.min(TOTAL_STEPS, step)) }),
-  nextStep: () =>
-    set((state) => ({
-      currentStep: Math.min(TOTAL_STEPS, state.currentStep + 1),
-    })),
-  prevStep: () =>
-    set((state) => ({
-      currentStep: Math.max(1, state.currentStep - 1),
-    })),
+  activeCalculator: null,
+  setActiveCalculator: (id: string | null) => set({ activeCalculator: id }),
+
+  activeSavedCalcId: null,
+  setActiveSavedCalcId: (id: string | null) => set({ activeSavedCalcId: id }),
 
   theme: 'system',
   setTheme: (theme: Theme) => set({ theme }),
@@ -51,7 +42,4 @@ export const useUIStore = create<UIState>()((set) => ({
   sidebarOpen: true,
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
-
-  bottomSheetSnap: 'collapsed',
-  setBottomSheetSnap: (snap) => set({ bottomSheetSnap: snap }),
 }));

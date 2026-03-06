@@ -4,25 +4,20 @@ import { useEffect } from 'react';
 import { use } from 'react';
 import { useTranslations } from 'next-intl';
 import { useProjectStore } from '@/store/project';
-import { useUIStore } from '@/store/ui';
-import { AppShell } from '@/components/layout/AppShell';
-import { WizardContainer } from '@/components/wizard/WizardContainer';
-import { LiveResultsPanel } from '@/components/charts/LiveResultsPanel';
+import { CalculatorCatalog } from '@/components/project/CalculatorCatalog';
 
 type Props = {
   params: Promise<{ id: string }>;
 };
 
-export default function ProjectWizardPage({ params }: Props) {
+export default function ProjectPage({ params }: Props) {
   const { id } = use(params);
   const t = useTranslations();
-  const { building, isLoading, loadProject } = useProjectStore();
-  const { setStep } = useUIStore();
+  const { building, isLoading, loadProject, loadSavedCalculations } = useProjectStore();
 
   useEffect(() => {
-    void loadProject(id);
-    setStep(1);
-  }, [id, loadProject, setStep]);
+    void loadProject(id).then(() => loadSavedCalculations());
+  }, [id, loadProject, loadSavedCalculations]);
 
   if (isLoading) {
     return (
@@ -42,9 +37,5 @@ export default function ProjectWizardPage({ params }: Props) {
     );
   }
 
-  return (
-    <AppShell results={<LiveResultsPanel />}>
-      <WizardContainer />
-    </AppShell>
-  );
+  return <CalculatorCatalog />;
 }

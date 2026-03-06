@@ -18,7 +18,9 @@
     "import": "Importer",
     "settings": "Paramètres",
     "help": "Aide",
-    "skip": "Passer"
+    "skip": "Passer",
+    "saveChanges": "Enregistrer les modifications",
+    "installApp": "Installer l'application"
   },
   "nav": {
     "home": "Accueil",
@@ -28,193 +30,37 @@
     "settings": "Paramètres",
     "projects": "Projets"
   },
+  "header": {
+    "teuiVersion": "Version TEUI"
+  },
   "meta": {
-    "appName": "OBJECTIVE",
+    "appName": "OAA TEUI",
     "appDescription": "Plateforme de performance énergétique des bâtiments",
     "tagline": "Modéliser, mesurer et améliorer la performance énergétique des bâtiments"
   },
-  "wizard": {
-    "step1": {
-      "title": "Configuration du projet",
-      "description": "Entrez les informations de base de votre bâtiment pour commencer",
-      "nameLabel": "Nom du projet",
-      "namePlaceholder": "Mon projet de bâtiment",
-      "addressLabel": "Adresse du bâtiment",
-      "addressPlaceholder": "123 rue Principale, Ville, Province",
-      "buildingTypeLabel": "Type de bâtiment",
-      "buildingTypePlaceholder": "Sélectionner un type de bâtiment",
-      "climateHint": "Les données climatiques (DJC/DJR) seront remplies automatiquement à partir de votre emplacement.",
-      "climateLoaded": "Données climatiques chargées : {location} (DJC : {hdd}, DJR : {cdd}, Zone : {zone})"
-    },
-    "step2": {
-      "title": "Caractéristiques du bâtiment",
-      "description": "Définissez les caractéristiques physiques de votre bâtiment",
-      "areaLabel": "Surface brute de plancher",
-      "areaPlaceholder": "Entrez la surface en m²",
-      "floorsLabel": "Nombre d'étages",
-      "floorsPlaceholder": "Entrez le nombre d'étages",
-      "volumeLabel": "Volume du bâtiment",
-      "volumePlaceholder": "Entrez le volume en m³",
-      "occupancyLabel": "Occupation typique",
-      "occupancyPlaceholder": "Entrez le nombre d'occupants"
-    },
-    "step3": {
-      "title": "Factures énergétiques",
-      "description": "Entrez les données de consommation énergétique annuelle de votre bâtiment",
-      "electricityLabel": "Électricité",
-      "electricityPlaceholder": "Électricité annuelle en kWh",
-      "gasLabel": "Gaz naturel",
-      "gasPlaceholder": "Gaz annuel en m³",
-      "oilLabel": "Mazout",
-      "oilPlaceholder": "Mazout annuel en litres",
-      "woodLabel": "Bois / Biomasse",
-      "woodPlaceholder": "Bois annuel en tonnes",
-      "skip": "Passer"
-    },
-    "step4": {
-      "title": "Enveloppe",
-      "description": "Définissez l'enveloppe thermique de votre bâtiment — murs, toit, fenêtres et étanchéité à l'air.",
-      "quickPresets": "Préréglages rapides",
-      "presetCodeMin": "Minimum du code",
-      "presetHighPerf": "Haute performance",
-      "presetPassive": "Maison passive",
-      "roofULabel": "Valeur U du toit",
-      "roofUPlaceholder": "p. ex. 0,183",
-      "airtightnessLabel": "Étanchéité à l'air",
-      "airtightnessPassive": "Maison passive (0,3)",
-      "airtightnessLeaky": "Perméable (10,0)",
-      "showAdvanced": "Afficher les détails avancés des murs et fenêtres",
-      "hideAdvanced": "Masquer les détails avancés des murs et fenêtres",
-      "advancedHint": "Ajoutez des sections individuelles de murs et de fenêtres avec orientation. Pour une estimation rapide, une entrée par orientation suffit généralement.",
-      "wallsLabel": "Murs",
-      "wallsPlaceholder": "Valeur RSI effective",
-      "areaPlaceholder": "Surface m²",
-      "uValuePlaceholder": "Valeur U",
-      "addWall": "Ajouter une section de mur",
-      "windowsLabel": "Fenêtres",
-      "windowsPlaceholder": "Valeur U en W/m²·K",
-      "shgcPlaceholder": "SHGC",
-      "addWindow": "Ajouter une section de fenêtre",
-      "roofLabel": "Isolation du toit (RSI)",
-      "roofPlaceholder": "Valeur RSI effective",
-      "airtightnessPlaceholder": "Changements d'air par heure à 50 Pa"
-    },
-    "step5": {
-      "title": "Systèmes et charges",
-      "description": "Définissez vos systèmes CVCA, eau chaude, éclairage et équipements.",
-      "systemPackages": "Ensembles de systèmes",
-      "presetStandardGas": "Gaz standard",
-      "presetHeatPump": "Thermopompe",
-      "presetAllElectric": "Tout électrique",
-      "heatingLabel": "Chauffage",
-      "coolingLabel": "Climatisation",
-      "dhwLabel": "Eau chaude",
-      "ventilationLabel": "Ventilation",
-      "internalLoadsLabel": "Charges internes",
-      "typeLabel": "Type",
-      "copLabel": "COP / AFUE",
-      "copCoolingLabel": "COP",
-      "efficiencyLabel": "Efficacité",
-      "rateLabel": "Taux (ACH)",
-      "hrvEffLabel": "Eff. VRC",
-      "lightingLabel": "Éclairage (W/m²)",
-      "equipmentLabel": "Équipements (W/m²)",
-      "hvacLabel": "Type de système HVAC",
-      "hvacPlaceholder": "Sélectionner le système HVAC",
-      "dhwPlaceholder": "Sélectionner le système ECD",
-      "lightingPlaceholder": "W/m²",
-      "equipmentPlaceholder": "W/m²",
-      "heatingTypes": {
-        "gas_furnace": "Fournaise au gaz",
-        "boiler": "Chaudière au gaz",
-        "heat_pump": "Thermopompe",
-        "electric_baseboard": "Plinthes électriques",
-        "other": "Autre"
-      },
-      "coolingTypes": {
-        "central_ac": "Climatisation centrale",
-        "heat_pump": "Thermopompe",
-        "none": "Aucun",
-        "other": "Autre"
-      },
-      "dhwTypes": {
-        "gas_tank": "Réservoir au gaz",
-        "electric_tank": "Réservoir électrique",
-        "heat_pump": "Thermopompe",
-        "tankless": "Sans réservoir",
-        "other": "Autre"
-      },
-      "ventTypes": {
-        "natural": "Naturelle",
-        "mechanical": "Mécanique",
-        "hrv": "VRC",
-        "erv": "VRE"
-      }
-    },
-    "step6": {
-      "title": "Renouvelables et compensations",
-      "description": "Ajoutez de la production sur site et des compensations carbone pour réduire votre énergie nette et vos émissions.",
-      "solarPvLabel": "Solaire PV",
-      "pvCapacityLabel": "Capacité installée (kW)",
-      "pvCapacityPlaceholder": "p. ex. 10",
-      "pvAnnualLabel": "Production annuelle (kWh)",
-      "pvAnnualPlaceholder": "p. ex. 12000",
-      "windLabel": "Éolien",
-      "windCapacityLabel": "Capacité (kW)",
-      "windAnnualLabel": "Annuel (kWh)",
-      "offsetsLabel": "Compensations et crédits",
-      "recsLabel": "Certificats d'énergie renouvelable (kWh/an)",
-      "recsPlaceholder": "CER annuels en kWh",
-      "greenGasLabel": "Gaz vert (m³/an)",
-      "greenGasPlaceholder": "Gaz vert annuel en m³",
-      "carbonCreditsLabel": "Crédits carbone (kgCO₂)",
-      "viewResults": "Voir les résultats",
-      "pvLabel": "Système photovoltaïque (PV)",
-      "pvPlaceholder": "Capacité installée en kW",
-      "windPlaceholder": "Capacité installée en kW"
-    },
-    "step7": {
-      "title": "Résultats",
-      "description": "Consultez les résultats de performance énergétique de votre bâtiment"
-    },
-    "stepNofTotal": "Étape {current} sur {total}"
-  },
-  "results": {
-    "teuiLabel": "TEUI",
-    "teuiDescription": "Intensité de consommation énergétique totale",
-    "tediLabel": "TEDI",
-    "tediDescription": "Intensité de la demande énergétique thermique",
-    "ghgiLabel": "GHGI",
-    "ghgiDescription": "Intensité des émissions de gaz à effet de serre",
-    "benchmarks": "Références",
-    "benchmarkComparison": "Comparaison des références",
-    "buildingLabel": "Bâtiment",
-    "valueLabel": "Valeur",
-    "energyBalance": "Bilan énergétique",
-    "sankey": "Flux énergétique (Sankey)",
-    "sankeyAriaLabel": "Diagramme de flux énergétique Sankey",
-    "noSankeyData": "Complétez les données du bâtiment pour voir le flux énergétique",
-    "percentOfCode": "{value} % de l'exigence du code",
-    "percentOfCodeMax": "{value} % du maximum du code",
-    "betterThanAverage": "{value} % meilleur que la moyenne",
-    "aboveAverage": "{value} % au-dessus de la moyenne",
-    "atAverage": "À la moyenne",
-    "calcResults": "Résultats du calcul",
-    "referenceCode": "Référence (Code)",
-    "yourBuilding": "Votre bâtiment",
-    "codeMaximum": "Maximum du code",
-    "nationalAverage": "Moyenne nationale",
-    "passiveHouse": "Maison passive"
-  },
-  "units": {
-    "kwhPerM2Yr": "kWh/m²/an",
-    "kgCo2PerM2Yr": "kg CO₂/m²/an",
-    "kwh": "kWh",
-    "m2": "m²",
-    "m3": "m³",
-    "degC": "°C",
-    "wPerM2K": "W/m²·K",
-    "ach": "ACH"
+  "landing": {
+    "headline1": "Modélisez la performance énergétique de votre bâtiment avec précision",
+    "headlineAccent": "et",
+    "headline2": "clarté",
+    "subtitle": "Calculez le TEUI, TEDI et GHGI de tout bâtiment. Visualisez les flux énergétiques, comparez aux références et prenez des décisions éclairées — le tout hors ligne.",
+    "descriptor": "Calculateur de performance énergétique",
+    "cta": "Connexion",
+    "heroCta": "Commencer",
+    "emailLabel": "Courriel",
+    "emailPlaceholder": "vous@exemple.com",
+    "passwordLabel": "Mot de passe",
+    "loginButton": "Se connecter",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Pas de compte ?",
+    "signUp": "S'inscrire",
+    "learnMore": "En savoir plus",
+    "navFeatures": "Fonctionnalités",
+    "navHowItWorks": "Comment ça marche",
+    "navAbout": "À propos",
+    "yourProjects": "Vos projets",
+    "yourProjectsSubtitle": "Reprenez là où vous en étiez ou démarrez un nouveau modèle énergétique",
+    "footerTagline": "Modélisation de précision pour les architectes de l'Ontario",
+    "footerVersion": "v.0.0.5 [BÊTA]"
   },
   "buildings": {
     "createNew": "Créer un nouveau projet",
@@ -222,6 +68,21 @@
     "emptyState": "Commencez par créer votre premier modèle énergétique de bâtiment",
     "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.",
     "lastEdited": "Dernière modification le {date}",
+    "projectCount": "{count, plural, one {# projet} other {# projets}}",
+    "filterAll": "Tous les projets",
+    "filterActive": "Actifs",
+    "filterCompleted": "Terminés",
+    "filterArchived": "Archivés",
+    "colProject": "Identification du projet",
+    "colDate": "Date",
+    "colTeui": "Métrique TEUI",
+    "colTedi": "Métrique TEDI",
+    "colAction": "Action",
+    "namePlaceholder": "Mon projet de bâtiment",
+    "noType": "Non classé",
+    "showingCount": "Affichage de {count} sur {total} instances de projets",
+    "archive": "Archiver",
+    "unarchive": "Désarchiver",
     "types": {
       "residential": "Résidentiel",
       "office": "Bureau",
@@ -232,10 +93,165 @@
       "mixed": "Usage mixte"
     }
   },
+  "catalog": {
+    "title": "Calculateurs",
+    "subtitle": "Sélectionnez un calculateur à configurer pour ce projet",
+    "searchPlaceholder": "Rechercher des calculateurs...",
+    "all": "Tous",
+    "comingSoon": "Bientôt disponible",
+    "noResults": "Aucun calculateur ne correspond à votre recherche",
+    "tabMyCalculations": "Mes calculs",
+    "tabSearchCalculations": "Rechercher des calculs",
+    "colCalculator": "Calculateur",
+    "colDate": "Date",
+    "colTeui": "TEUI",
+    "colGhgi": "GHGI",
+    "colAction": "Action",
+    "noSavedCalculations": "Aucun calcul enregistré",
+    "noSavedDescription": "Exécutez un calculateur et enregistrez les résultats pour les voir ici",
+    "showingSavedCount": "Affichage de {count} sur {total} calculs enregistrés",
+    "saveModalTitle": "Enregistrer le calcul",
+    "saveModalLabel": "Nom du calcul",
+    "saveModalPlaceholder": "ex. Modèle énergétique de base",
+    "saveModalDone": "Terminé",
+    "categories": {
+      "energy": "Énergie",
+      "carbon": "Carbone",
+      "compliance": "Conformité",
+      "water": "Eau et QAI"
+    }
+  },
+  "calculators": {
+    "teui-v1": {
+      "name": "TEUI v1",
+      "description": "Intensité énergétique à partir des factures"
+    },
+    "teui-v2": {
+      "name": "TEUI v2",
+      "description": "Calculateur étendu avec renouvelables"
+    },
+    "teui-v3": {
+      "name": "TEUI v3",
+      "description": "Modèle de bilan énergétique complet"
+    },
+    "teui-v4": {
+      "name": "TEUI v4",
+      "description": "Modèle calibré en temps réel"
+    },
+    "tedi": {
+      "name": "TEDI",
+      "description": "Intensité de la demande énergétique thermique"
+    },
+    "ghgi": {
+      "name": "GHGI",
+      "description": "Intensité des gaz à effet de serre"
+    },
+    "embodied-carbon": {
+      "name": "Carbone intrinsèque",
+      "description": "Carbone initial des matériaux"
+    },
+    "whole-life-carbon": {
+      "name": "Carbone cycle de vie",
+      "description": "Évaluation carbone du cycle de vie complet"
+    },
+    "necb": {
+      "name": "CNÉB",
+      "description": "Conformité au Code national de l'énergie"
+    },
+    "sb10": {
+      "name": "SB-10",
+      "description": "Code du bâtiment de l'Ontario SB-10"
+    },
+    "sb12": {
+      "name": "SB-12",
+      "description": "Code du bâtiment de l'Ontario SB-12"
+    },
+    "water-use": {
+      "name": "Consommation d'eau",
+      "description": "Analyse de la consommation d'eau du bâtiment"
+    },
+    "iaq": {
+      "name": "Qualité de l'air intérieur",
+      "description": "Évaluation et suivi de la QAI"
+    }
+  },
+  "teui1": {
+    "title": "Calculateur TEUI v1",
+    "subtitle": "Intensit\u00E9 \u00E9nerg\u00E9tique \u00E0 partir des factures",
+    "back": "Retour aux calculateurs",
+    "showResults": "Afficher les r\u00E9sultats",
+    "hideResults": "Masquer les r\u00E9sultats",
+    "tabs": {
+      "building": "B\u00E2timent",
+      "energy": "\u00C9nergie",
+      "renewables": "Renouvelables",
+      "project": "Projet"
+    },
+    "building": {
+      "typology": "Typologie du b\u00E2timent",
+      "conditionedArea": "Surface conditionn\u00E9e",
+      "hint": "Surface totale chauff\u00E9e/climatis\u00E9e du b\u00E2timent",
+      "sqft": "pi\u00B2",
+      "sqm": "m\u00B2"
+    },
+    "energy": {
+      "electricity": "\u00C9lectricit\u00E9",
+      "electricityUnit": "kWh",
+      "naturalGas": "Gaz naturel",
+      "naturalGasUnit": "m\u00B3",
+      "propane": "Propane",
+      "propaneUnit": "lbs",
+      "heatingOil": "Mazout",
+      "heatingOilUnit": "litres",
+      "biofuel": "Biocarburant",
+      "biofuelUnit": "m\u00B3",
+      "renewables": "Renouvelables",
+      "convertedTo": "="
+    },
+    "renewables": {
+      "onSite": "Production sur site",
+      "offSiteElectricity": "\u00C9lectricit\u00E9 hors site (CER)",
+      "offSiteGas": "Gaz vert hors site",
+      "hint": "Les compensations d'\u00E9nergie renouvelable r\u00E9duisent votre TEUI net"
+    },
+    "project": {
+      "beginDate": "Date de d\u00E9but d'\u00E9valuation",
+      "endDate": "Date de fin d'\u00E9valuation",
+      "period": "G\u00E9n\u00E9ralement une p\u00E9riode d'\u00E9valuation de 12 mois"
+    },
+    "results": {
+      "title": "Score TEUI",
+      "teui": "TEUI",
+      "teuiUnit": "kWh/m\u00B2/an",
+      "ghgi": "Votre b\u00E2timent",
+      "ghgiUnit": "kgCO\u2082e/m\u00B2",
+      "ghgiTotal": "MT CO\u2082e total",
+      "breakdown": "Mix \u00E9nerg\u00E9tique",
+      "totalEnergy": "\u00C9nergie totale",
+      "netEnergy": "\u00C9nergie nette",
+      "sources": "Sources",
+      "noData": "Entrez la surface et les donn\u00E9es \u00E9nerg\u00E9tiques pour voir les r\u00E9sultats",
+      "viewAsTable": "Voir en tableau",
+      "canadianAvg": "Moyenne canadienne"
+    },
+    "compliance": {
+      "excellent": "Excellent",
+      "good": "Bon",
+      "average": "Moyen",
+      "belowAverage": "Inf\u00E9rieur \u00E0 la moyenne",
+      "poor": "Faible"
+    }
+  },
+  "units": {
+    "kwhPerM2Yr": "kWh/m²/an",
+    "kgCo2PerM2Yr": "kg CO₂/m²/an",
+    "kwh": "kWh",
+    "m2": "m²",
+    "m3": "m³",
+    "ft2": "pi²"
+  },
   "a11y": {
     "skipToContent": "Passer au contenu principal",
-    "resultsUpdated": "Les résultats ont été mis à jour",
-    "stepNofTotal": "Étape {current} sur {total}",
     "menuOpen": "Ouvrir le menu",
     "menuClose": "Fermer le menu",
     "languageSwitch": "Changer de langue",
@@ -244,8 +260,6 @@
   "errors": {
     "required": "Ce champ est obligatoire",
     "positiveNumber": "Veuillez entrer un nombre positif",
-    "invalidAddress": "Veuillez entrer une adresse valide",
-    "calculationFailed": "Le calcul a échoué. Veuillez vérifier vos données et réessayer.",
     "projectNotFound": "Projet introuvable",
     "offlineNoCache": "Vous êtes hors ligne et ce contenu n'est pas disponible dans le cache"
   }

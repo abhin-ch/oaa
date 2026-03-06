@@ -1,70 +1,37 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useUIStore } from '@/store/ui';
-import { useRouter, usePathname } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { ThemeLocaleToggles } from './ThemeLocaleToggles';
 
 export function Header() {
-  const t = useTranslations();
   const router = useRouter();
-  const pathname = usePathname();
-  const { theme, setTheme, locale, setLocale } = useUIStore();
-
-  const toggleTheme = () => {
-    const next = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
-    setTheme(next);
-
-    if (
-      next === 'dark' ||
-      (next === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
-
-  const toggleLocale = () => {
-    const nextLocale = locale === 'en' ? 'fr' : 'en';
-    setLocale(nextLocale);
-    router.replace(pathname, { locale: nextLocale });
-  };
-
-  const themeIcon = theme === 'dark' ? '☀️' : theme === 'light' ? '🌙' : '💻';
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border-default bg-bg-surface/80 backdrop-blur-xl supports-[backdrop-filter]:bg-bg-surface/60">
+    <header className="sticky top-0 z-50 border-b border-border-subtle bg-bg-surface">
       <div
         className="flex h-14 items-center justify-between px-4 md:px-6"
         style={{ paddingTop: 'var(--safe-top)' }}
       >
-        {/* Logo */}
-        <button onClick={() => router.push('/')} className="flex items-center gap-2">
-          <span className="text-lg font-semibold tracking-tight text-text-primary">
-            {t('meta.appName')}
-          </span>
-        </button>
-
-        {/* Right actions */}
-        <div className="flex items-center gap-2">
-          {/* Language toggle */}
-          <button
-            onClick={toggleLocale}
-            className="rounded-md px-2 py-1 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-raised hover:text-text-primary"
-            aria-label={t('a11y.languageSwitch')}
-          >
-            {locale === 'en' ? 'FR' : 'EN'}
-          </button>
-
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            className="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-bg-raised hover:text-text-primary"
-            aria-label={t('a11y.themeToggle')}
-          >
-            <span className="text-sm">{themeIcon}</span>
+        {/* Logo + branding */}
+        <div className="flex items-center gap-4">
+          <button onClick={() => router.push('/')} className="flex items-center gap-3">
+            <svg
+              viewBox="-1 -1 110 110"
+              fill="currentColor"
+              className="h-6 w-6 text-text-primary"
+              aria-hidden="true"
+            >
+              <path
+                d="M102.69,12.11v18.4a54.9,54.9,0,0,0-25.3-25.3h18.4V-.19H-.11v95.9h5.4V77.31a54.9,54.9,0,0,0,25.3,25.3H12.19V108h95.9V12.11ZM5.29,5.21h25.3a54.9,54.9,0,0,0-25.3,25.3Zm0,48.7A48.7,48.7,0,1,1,54,102.61,48.76,48.76,0,0,1,5.29,53.91Zm72.2,48.7a54.9,54.9,0,0,0,25.3-25.3v25.3Z"
+                transform="translate(0.11 0.19)"
+              />
+            </svg>
+            <span className="text-sm font-medium tracking-wide text-text-primary">OAA</span>
           </button>
         </div>
+
+        {/* Right actions */}
+        <ThemeLocaleToggles />
       </div>
     </header>
   );

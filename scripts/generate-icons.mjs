@@ -1,0 +1,30 @@
+import sharp from 'sharp';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const iconsDir = path.join(__dirname, '..', 'public', 'icons');
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#fafafa" rx="0"/>
+  <g transform="translate(56, 56) scale(3.636)">
+    <g transform="translate(0.11, 0.19)">
+      <path d="M102.69,12.11v18.4a54.9,54.9,0,0,0-25.3-25.3h18.4V-.19H-.11v95.9h5.4V77.31a54.9,54.9,0,0,0,25.3,25.3H12.19V108h95.9V12.11ZM5.29,5.21h25.3a54.9,54.9,0,0,0-25.3,25.3Zm0,48.7A48.7,48.7,0,1,1,54,102.61,48.76,48.76,0,0,1,5.29,53.91Zm72.2,48.7a54.9,54.9,0,0,0,25.3-25.3v25.3Z" fill="#171717"/>
+    </g>
+  </g>
+</svg>`;
+
+const svgBuffer = Buffer.from(svg);
+
+const sizes = [
+  { name: 'icon-192.png', size: 192 },
+  { name: 'icon-512.png', size: 512 },
+  { name: 'apple-touch-icon.png', size: 180 },
+];
+
+for (const { name, size } of sizes) {
+  await sharp(svgBuffer).resize(size, size).png().toFile(path.join(iconsDir, name));
+  console.log(`Generated ${name} (${size}x${size})`);
+}
+
+console.log('All icons generated successfully.');

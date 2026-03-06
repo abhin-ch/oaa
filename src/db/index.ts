@@ -1,19 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { Building, BuildingSummary } from '@/schema/building';
-
-// ============================================
-// Climate cache entry
-// ============================================
-
-export interface ClimateCache {
-  locationKey: string; // lat,lon rounded or city name
-  hddC: number;
-  cddC: number;
-  designHeatTempC: number;
-  designCoolTempC: number;
-  zone: string;
-  fetchedAt: string; // ISO 8601
-}
+import type { Building, BuildingSummary, SavedCalculation } from '@/schema/building';
 
 // ============================================
 // Database definition
@@ -21,14 +7,36 @@ export interface ClimateCache {
 
 class ObjectiveDB extends Dexie {
   projects!: EntityTable<Building, 'id'>;
-  climateCache!: EntityTable<ClimateCache, 'locationKey'>;
+  savedCalculations!: EntityTable<SavedCalculation, 'id'>;
 
   constructor() {
     super('objective-db');
 
-    this.version(1).stores({
+    this.version(2).stores({
       projects: 'id, meta.name, meta.updatedAt',
-      climateCache: 'locationKey, fetchedAt',
+      // Drop climate cache — will rebuild when needed
+      climateCache: null,
+    });
+
+    this.version(3)
+      .stores({
+        projects: 'id, meta.name, meta.updatedAt',
+      })
+      .upgrade((tx) =>
+        tx
+          .table('projects')
+          .toCollection()
+          .modify((project) => {
+            if (!project.energySources) project.energySources = {};
+            if (!project.renewables) project.renewables = {};
+            if (!project.evaluationPeriod) project.evaluationPeriod = {};
+            project.schemaVersion = 3;
+          }),
+      );
+
+    this.version(4).stores({
+      projects: 'id, meta.name, meta.updatedAt',
+      savedCalculations: 'id, projectId, calculatorId, savedAt',
     });
   }
 }
@@ -55,7 +63,7 @@ export async function listProjects(): Promise<BuildingSummary[]> {
     name: b.meta.name,
     address: b.meta.address,
     updatedAt: b.meta.updatedAt,
-    conditionedAreaM2: b.geometry.conditionedAreaM2,
+    archived: b.meta.archived ?? false,
   }));
 }
 
@@ -74,24 +82,26 @@ export async function deleteProject(id: string): Promise<void> {
 }
 
 // ============================================
-// Climate cache helpers
+// Saved Calculations CRUD helpers
 // ============================================
 
-const CACHE_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
-
-export async function getCachedClimate(locationKey: string): Promise<ClimateCache | undefined> {
-  const entry = await db.climateCache.get(locationKey);
-  if (!entry) return undefined;
-
-  const age = Date.now() - new Date(entry.fetchedAt).getTime();
-  if (age > CACHE_MAX_AGE_MS) {
-    await db.climateCache.delete(locationKey);
-    return undefined;
-  }
-
-  return entry;
+export async function saveCalculation(calc: SavedCalculation): Promise<string> {
+  await db.savedCalculations.add(calc);
+  return calc.id;
 }
 
-export async function setCachedClimate(data: ClimateCache): Promise<void> {
-  await db.climateCache.put(data);
+export async function listSavedCalculations(projectId: string): Promise<SavedCalculation[]> {
+  const calcs = await db.savedCalculations.where('projectId').equals(projectId).toArray();
+  return calcs.sort((a, b) => (b.savedAt ?? '').localeCompare(a.savedAt ?? ''));
+}
+
+export async function updateSavedCalculation(
+  id: string,
+  changes: Partial<SavedCalculation>,
+): Promise<void> {
+  await db.savedCalculations.update(id, changes);
+}
+
+export async function deleteSavedCalculation(id: string): Promise<void> {
+  await db.savedCalculations.delete(id);
 }

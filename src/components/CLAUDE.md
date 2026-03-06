@@ -2,75 +2,65 @@
 
 ## Purpose
 
-All React UI components. Organized by function: base UI primitives, wizard steps, charts/visualizations, and layout shell.
-
-## Design System Reference
-
-See `docs/design-system.md` for the complete visual language: colors, typography, spacing, component specs, animation rules, responsive layouts, and accessibility requirements. All components must follow that spec.
+All React UI components. Organized by function: base UI primitives, calculator workspace, landing page, layout shell, and project management.
 
 ## Structure
 
 ```
 components/
-├── ui/          # shadcn/ui base components (Button, Input, Slider, Dialog, Tooltip, etc.)
-├── wizard/      # Wizard step components (one per step in the user journey)
-├── charts/      # Data visualizations (Sankey, bar charts, gauges, benchmark comparisons)
-└── layout/      # App shell (header, nav, sidebar, footer, language switcher)
+├── ui/               # shadcn/ui base components (Button, Input, Dialog, etc.)
+├── calculator/       # Calculator workspace
+│   ├── SaveCalculationModal.tsx
+│   └── teui1/        # TEUI v1 calculator
+│       ├── TEUI1Calculator.tsx    # Main calculator orchestrator
+│       ├── InputPanel.tsx         # Tab container for input forms
+│       ├── inputs/                # Input tab components
+│       │   ├── ProjectTab.tsx
+│       │   ├── BuildingTab.tsx
+│       │   ├── EnergyBillsTab.tsx
+│       │   ├── AreaInput.tsx
+│       │   ├── EnergySourceInput.tsx
+│       │   └── RenewablesTab.tsx
+│       └── results/               # Live results visualizations
+│           ├── ResultsPanel.tsx    # Main results orchestrator
+│           ├── EnergyBars.tsx      # Energy breakdown bars + inline donut
+│           ├── AnimatedNumber.tsx  # Animated numeric display
+│           └── Building3D.tsx     # Three.js 3D building model
+├── landing/          # Landing/marketing page
+│   ├── LandingHero.tsx
+│   ├── LandingNav.tsx
+│   ├── LoginModal.tsx
+│   ├── IsometricBuilding.tsx      # React Three Fiber building
+│   ├── IsometricScene.tsx
+│   ├── EnergyFlowBg.tsx
+│   └── building-parts/            # Isometric scene sub-components
+├── layout/           # App shell
+│   ├── Header.tsx
+│   ├── Sidebar.tsx
+│   ├── BottomTabBar.tsx
+│   ├── OfflineBanner.tsx
+│   ├── SkipToContent.tsx
+│   └── DotGrid.tsx
+└── project/
+    └── CalculatorCatalog.tsx      # Calculator selection grid
 ```
 
 ## Conventions
 
-### General
-
-- All components are TypeScript (`.tsx`) with explicit prop types
 - All user-facing text uses `useTranslations()` — zero hardcoded strings
-- Prefer composition over prop drilling — use Zustand hooks for shared state
-- Keep components focused: if it does two things, split it
+- Prefer Zustand hooks for shared state over prop drilling
+- Check `src/components/ui/` before building custom components
+- Calculator layout: 40/60 split (inputs left, live results right)
+- All charts/animations respect `prefers-reduced-motion`
 
-### ui/ (shadcn/ui)
+## Deleted Components (cleanup)
 
-- Generated via `npx shadcn-ui@latest add <component>`
-- These are **owned code**, not a dependency — customize freely
-- Follow Radix UI patterns: composable, accessible by default
-- Do NOT modify the base API unless necessary — extend via wrapper components instead
-- Before building a custom component, check if shadcn/ui has one
+These were removed as dead code — do not re-create:
 
-### wizard/
-
-- One component per wizard step: `ProjectSetup`, `BuildingBasics`, `EnergyBills`, `Envelope`, `SystemsLoads`, `Renewables`, `Results`
-- Each step receives project data from Zustand store and dispatches updates
-- Steps show a mini-result summary reflecting the impact of inputs in that step
-- Steps validate required fields before allowing "Next" navigation
-- Wizard state (current step, completion) lives in the UI store
-
-### charts/
-
-- Sankey diagram: D3.js-based, shows energy flows (sources → uses → losses)
-- Bar/line charts: Recharts-based, for benchmarks, monthly data, scenarios
-- All charts must have text alternatives (`aria-label` or adjacent data table) for accessibility
-- Charts animate on data change but respect `prefers-reduced-motion`
-- Responsive: charts resize with container, touch-friendly tooltips on mobile
-
-### layout/
-
-- App shell is consistent across all pages
-- Header includes: logo, project name (if in project), language switcher (EN/FR), theme toggle
-- Mobile: bottom navigation bar for wizard steps; hamburger menu for settings
-- Desktop: sidebar navigation for wizard steps when inside a project
-
-## Accessibility Requirements
-
-- All interactive elements: visible focus rings, keyboard operable
-- Form inputs: visible `<label>`, not just placeholder text
-- Tooltips/popovers: accessible via keyboard (Radix handles this)
-- Color: never the sole indicator — use icons, patterns, or labels alongside
-- Dynamic content: `aria-live="polite"` for calculation result updates
-
-## Status
-
-- [ ] shadcn/ui base components installed
-- [ ] App shell layout (header, nav, language switcher)
-- [ ] Wizard step components (Steps 1–7)
-- [ ] Sankey diagram component
-- [ ] Benchmark comparison charts
-- [ ] Mobile-responsive layout
+- `results/EnergyDonut.tsx` — replaced by inline donut in EnergyBars
+- `results/GHGICard.tsx` — inlined in ResultsPanel
+- `results/GradientBar.tsx` — inlined in ResultsPanel
+- `results/TEUIHeroNumber.tsx` — inlined in ResultsPanel
+- `results/WidgetCard.tsx` — never imported
+- `results/BuildingSchematic.tsx` — replaced by Building3D
+- `layout/AppShell.tsx` — each page has own Header + layout

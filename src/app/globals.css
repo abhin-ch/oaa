@@ -5,12 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================
-   OBJECTIVE Design System — Tailwind v4 Theme
+   OAA TEUI Factsheet Design System — B&W
    ============================================ */
 
 @theme inline {
-  /* Fonts */
-  --font-sans: var(--font-geist-sans);
+  /* Fonts — Akkurat is the OAA brand typeface */
+  --font-sans: var(--font-akkurat), Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
 
   /* Semantic background colors */
@@ -30,64 +30,64 @@
   --color-border-strong: var(--border-strong);
   --color-border-subtle: var(--border-subtle);
 
-  /* Energy / Primary accent (Amber) */
-  --color-energy-50: #fffbeb;
-  --color-energy-100: #fef3c7;
-  --color-energy-200: #fde68a;
-  --color-energy-300: #fcd34d;
-  --color-energy-400: #fbbf24;
-  --color-energy-500: #f59e0b;
-  --color-energy-600: #d97706;
-  --color-energy-700: #b45309;
-  --color-energy-800: #92400e;
-  --color-energy-900: #78350f;
+  /* Energy / Primary accent — OAA B&W scale */
+  --color-energy-50: #ffffff;
+  --color-energy-100: #f5f5f5;
+  --color-energy-200: #e6e6e6;
+  --color-energy-300: #9b9b9b;
+  --color-energy-400: #4b4b4b;
+  --color-energy-500: #000000;
+  --color-energy-600: #000000;
+  --color-energy-700: #4b4b4b;
+  --color-energy-800: #9b9b9b;
+  --color-energy-900: #e6e6e6;
 
-  /* Success / Performance (Teal) */
-  --color-success-50: #f0fdfa;
-  --color-success-100: #ccfbf1;
-  --color-success-200: #99f6e4;
-  --color-success-300: #5eead4;
-  --color-success-400: #2dd4bf;
-  --color-success-500: #14b8a6;
-  --color-success-600: #0d9488;
-  --color-success-700: #0f766e;
-  --color-success-800: #115e59;
-  --color-success-900: #134e4a;
+  /* Success / Performance — OAA grey scale */
+  --color-success-50: #ffffff;
+  --color-success-100: #f5f5f5;
+  --color-success-200: #e6e6e6;
+  --color-success-300: #9b9b9b;
+  --color-success-400: #9b9b9b;
+  --color-success-500: #4b4b4b;
+  --color-success-600: #4b4b4b;
+  --color-success-700: #2a2a2a;
+  --color-success-800: #1a1a1a;
+  --color-success-900: #000000;
 
-  /* Warning / Heat Loss (Rose) */
-  --color-warning-50: #fff1f2;
-  --color-warning-100: #ffe4e6;
-  --color-warning-200: #fecdd3;
-  --color-warning-300: #fda4af;
-  --color-warning-400: #fb7185;
-  --color-warning-500: #f43f5e;
-  --color-warning-600: #e11d48;
-  --color-warning-700: #be123c;
-  --color-warning-800: #9f1239;
-  --color-warning-900: #881337;
+  /* Warning / Heat Loss — OAA grey scale */
+  --color-warning-50: #ffffff;
+  --color-warning-100: #f5f5f5;
+  --color-warning-200: #e6e6e6;
+  --color-warning-300: #9b9b9b;
+  --color-warning-400: #9b9b9b;
+  --color-warning-500: #4b4b4b;
+  --color-warning-600: #4b4b4b;
+  --color-warning-700: #2a2a2a;
+  --color-warning-800: #1a1a1a;
+  --color-warning-900: #000000;
 
-  /* Info / Reference (Slate) */
-  --color-info-50: #f8fafc;
-  --color-info-100: #e2e8f0;
-  --color-info-200: #cbd5e1;
-  --color-info-300: #94a3b8;
-  --color-info-400: #64748b;
-  --color-info-500: #475569;
-  --color-info-600: #334155;
-  --color-info-700: #1e293b;
-  --color-info-800: #0f172a;
+  /* Info / Reference — OAA grey scale */
+  --color-info-50: #ffffff;
+  --color-info-100: #f5f5f5;
+  --color-info-200: #e6e6e6;
+  --color-info-300: #9b9b9b;
+  --color-info-400: #9b9b9b;
+  --color-info-500: #4b4b4b;
+  --color-info-600: #4b4b4b;
+  --color-info-700: #2a2a2a;
+  --color-info-800: #1a1a1a;
 
-  /* Border radius */
-  --radius-sm: 6px;
-  --radius-DEFAULT: 8px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* Border radius — sharp factsheet aesthetic */
+  --radius-sm: 2px;
+  --radius-DEFAULT: 4px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
 
-  /* Shadows */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-elevated: 0 4px 24px rgba(0, 0, 0, 0.08);
-  --shadow-sheet: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  /* Shadows — flat, minimal */
+  --shadow-card: none;
+  --shadow-elevated: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-sheet: 0 -2px 8px rgba(0, 0, 0, 0.06);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -125,104 +125,106 @@
 }
 
 /* ============================================
-   Light Mode (default)
+   Light Mode (default) — Pure B&W
    ============================================ */
 :root {
-  --bg-base: #fafafa;
+  /* OAA brand palette: #000000, #4b4b4b, #9b9b9b, #e6e6e6, #ffffff */
+  --bg-base: #ffffff;
   --bg-surface: #ffffff;
-  --bg-raised: #f5f5f4;
-  --bg-sunken: #ededeb;
+  --bg-raised: #f5f5f5;
+  --bg-sunken: #e6e6e6;
 
-  --text-primary: #1c1917;
-  --text-secondary: #57534e;
-  --text-tertiary: #a8a29e;
-  --text-inverse: #fafaf9;
+  --text-primary: #000000;
+  --text-secondary: #4b4b4b;
+  --text-tertiary: #9b9b9b;
+  --text-inverse: #ffffff;
 
-  --border-default: #e7e5e4;
-  --border-strong: #d6d3d1;
-  --border-subtle: #f5f5f4;
-  --radius: 0.625rem;
+  --border-default: #e6e6e6;
+  --border-strong: #9b9b9b;
+  --border-subtle: #e6e6e6;
+  --radius: 0.25rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.145 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.96 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --destructive: oklch(0.45 0 0);
+  --border: oklch(0.85 0 0);
+  --input: oklch(0.85 0 0);
+  --ring: oklch(0.3 0 0);
+  --chart-1: oklch(0.2 0 0);
+  --chart-2: oklch(0.4 0 0);
+  --chart-3: oklch(0.55 0 0);
+  --chart-4: oklch(0.7 0 0);
+  --chart-5: oklch(0.85 0 0);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.145 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent: oklch(0.96 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-border: oklch(0.85 0 0);
+  --sidebar-ring: oklch(0.3 0 0);
 }
 
 /* ============================================
-   Dark Mode
+   Dark Mode — Inverted B&W
    ============================================ */
 .dark {
-  --bg-base: #0c0a09;
-  --bg-surface: #1c1917;
-  --bg-raised: #292524;
-  --bg-sunken: #0c0a09;
+  /* OAA brand palette inverted for dark mode */
+  --bg-base: #000000;
+  --bg-surface: #1a1a1a;
+  --bg-raised: #2a2a2a;
+  --bg-sunken: #000000;
 
-  --text-primary: #fafaf9;
-  --text-secondary: #a8a29e;
-  --text-tertiary: #78716c;
-  --text-inverse: #1c1917;
+  --text-primary: #ffffff;
+  --text-secondary: #e6e6e6;
+  --text-tertiary: #9b9b9b;
+  --text-inverse: #000000;
 
-  --border-default: #292524;
-  --border-strong: #44403c;
-  --border-subtle: #1c1917;
-  --background: oklch(0.145 0 0);
+  --border-default: #2a2a2a;
+  --border-strong: #4b4b4b;
+  --border-subtle: #1a1a1a;
+  --background: oklch(0.1 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(0.15 0 0);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.15 0 0);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.22 0 0);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.6 0 0);
+  --accent: oklch(0.22 0 0);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --destructive: oklch(0.6 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
+  --ring: oklch(0.7 0 0);
+  --chart-1: oklch(0.9 0 0);
+  --chart-2: oklch(0.7 0 0);
+  --chart-3: oklch(0.55 0 0);
+  --chart-4: oklch(0.4 0 0);
+  --chart-5: oklch(0.25 0 0);
+  --sidebar: oklch(0.15 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-primary: oklch(0.9 0 0);
+  --sidebar-primary-foreground: oklch(0.145 0 0);
+  --sidebar-accent: oklch(0.22 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.7 0 0);
 }
 
 /* ============================================
@@ -231,17 +233,17 @@
 body {
   background: var(--bg-base);
   color: var(--text-primary);
-  font-family: var(--font-geist-sans), sans-serif;
+  font-family: var(--font-akkurat), Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Focus ring for keyboard users */
+/* Focus ring for keyboard users — OAA black */
 :focus-visible {
   outline: none;
   box-shadow:
     0 0 0 2px var(--bg-surface),
-    0 0 0 4px #fbbf24;
+    0 0 0 4px #000000;
 }
 
 :focus:not(:focus-visible) {
@@ -249,7 +251,7 @@ body {
   box-shadow: none;
 }
 
-/* iOS PWA safe areas */
+/* PWA safe areas — env() values are populated in standalone mode with viewport-fit=cover */
 :root {
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -293,9 +295,210 @@ body {
   background: var(--text-tertiary);
 }
 
+/* Dot grid color token — used by DotGrid component */
+:root {
+  --dot-grid-color: rgba(0, 0, 0, 0.12);
+}
+
+.dark {
+  --dot-grid-color: rgba(255, 255, 255, 0.2);
+}
+
 /* Tabular numbers for data displays */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
+   3D Building Visualization
+   ============================================ */
+
+/* Grid background for the visualization panel */
+.grid-bg {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+
+.dark .grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+}
+
+/* 3D Scene container — full size */
+.building-scene {
+  perspective: 1200px;
+  width: 300px;
+  height: 400px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+/* 3D Scene container — compact (for side-by-side layout) */
+.building-scene-sm {
+  perspective: 800px;
+  width: 160px;
+  height: 180px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+.building-container {
+  width: 200px;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-15deg) rotateY(-25deg);
+  animation: building-float 8s ease-in-out infinite;
+}
+
+/* Wire-frame face — base style for all 3D faces */
+.wire-face {
+  position: absolute;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  background: rgba(255, 255, 255, 0.85);
+  box-sizing: border-box;
+}
+
+.dark .wire-face {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Curtain Wall — office tower mullion grid */
+.curtain-wall {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 1px, transparent 1px);
+  background-size: 10px 20px;
+}
+
+.dark .curtain-wall {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 10px 20px;
+}
+
+/* Balcony Module — residential tower */
+.balcony-module {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 2px, transparent 2px);
+  background-size: 22px 28px;
+}
+
+.dark .balcony-module {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 2px, transparent 2px);
+  background-size: 22px 28px;
+}
+
+/* Glass Storefront — retail / entrance */
+.glass-storefront {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.04) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.04) 50%,
+    rgba(0, 0, 0, 0.04) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+}
+
+.dark .glass-storefront {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0.04) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Residential Windows — larger window grid */
+.residential-windows {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 30px 25px;
+}
+
+.dark .residential-windows {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 30px 25px;
+}
+
+/* Colonnade — vertical columns pattern */
+.colonnade {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25) 3px, transparent 3px);
+  background-size: 24px 100%;
+}
+
+.dark .colonnade {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2) 3px, transparent 3px);
+  background-size: 24px 100%;
+}
+
+/* Institutional Grid — formal symmetrical windows */
+.institutional-grid {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
+  background-size: 18px 24px;
+}
+
+.dark .institutional-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 18px 24px;
+}
+
+/* Industrial Panel — wide horizontal bands */
+.industrial-panel {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 2px, transparent 2px);
+  background-size: 100% 35px;
+}
+
+.dark .industrial-panel {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 2px, transparent 2px);
+  background-size: 100% 35px;
+}
+
+/* Float animation */
+@keyframes building-float {
+  0%,
+  100% {
+    transform: rotateX(-15deg) rotateY(-25deg) translateY(0);
+  }
+  50% {
+    transform: rotateX(-15deg) rotateY(-35deg) translateY(-12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .building-container {
+    animation: none;
+  }
 }
 
 @layer base {

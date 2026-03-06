@@ -2,48 +2,39 @@
 
 ## Purpose
 
-Next.js App Router pages and layouts. This is the routing and page-level orchestration layer — it connects UI components to state and renders pages.
+Next.js App Router pages and layouts. Routing and page-level orchestration layer.
 
 ## Structure
 
 ```
 app/
-├── layout.tsx          # Root layout (next-intl provider, theme, global shell)
-├── page.tsx            # Landing page / project list
-├── project/
-│   └── [id]/
-│       ├── page.tsx    # Wizard/dashboard for a single project
-│       └── results/    # Results dashboard view
-├── manifest.ts         # PWA web app manifest
-└── sw.ts               # Service worker registration
+├── layout.tsx                    # Root layout (html/body wrapper)
+├── page.tsx                      # Root redirect
+├── manifest.ts                   # PWA web app manifest (dynamic)
+├── sw.ts                         # Serwist service worker source
+├── serwist.ts                    # Client re-export of SerwistProvider
+├── globals.css                   # Global styles + CSS variables + safe area insets
+└── [locale]/
+    ├── layout.tsx                # Locale layout (NextIntlClientProvider + SerwistProvider)
+    ├── page.tsx                  # Landing page
+    ├── ~offline/page.tsx         # PWA offline fallback page
+    ├── projects/page.tsx         # Project list page
+    └── project/[id]/
+        ├── page.tsx              # Single project dashboard + calculator catalog
+        └── calculator/[calcId]/page.tsx  # Calculator workspace (TEUI1)
 ```
 
 ## Conventions
 
-- **Locale routing**: All routes are under `[locale]/` (e.g., `/en/project/123`). The root layout wraps with `NextIntlClientProvider`.
-- **Page components are thin**: Pages fetch data (from Zustand/IndexedDB), pass to components. No business logic in pages.
-- **Server vs Client**: Default to server components. Add `'use client'` only for interactive components (wizard steps, charts, inputs).
-- **Metadata**: Each page exports `generateMetadata` for SEO and PWA. Titles use i18n keys.
-- **Loading states**: Use `loading.tsx` files for Suspense boundaries with skeleton loaders.
-- **Error boundaries**: Use `error.tsx` files with user-friendly recovery UI.
+- **Locale routing**: All user routes under `[locale]/` via next-intl middleware
+- **Thin pages**: Pages fetch from Zustand/IndexedDB and delegate to components
+- **`'use client'`**: All pages use client components (Zustand, IndexedDB, interactivity)
+- **i18n**: `useTranslations()` for all text; never hardcode strings
 
 ## PWA
 
-- `manifest.ts` generates the web app manifest dynamically (name, icons, theme color)
-- Service worker is registered in the root layout via `sw.ts`
-- Offline fallback page should be a static shell with "You're offline" message
-
-## i18n
-
-- next-intl middleware handles locale detection and routing
-- Layout provides `NextIntlClientProvider` with messages from `src/messages/{locale}.json`
-- Pages/components use `useTranslations('namespace')` — never hardcode strings
-
-## Status
-
-- [ ] Root layout with i18n provider
-- [ ] Landing page (project list)
-- [ ] Project wizard page
-- [ ] Results dashboard page
-- [ ] PWA manifest and service worker
-- [ ] Loading and error boundaries
+- `manifest.ts` — Dynamic web app manifest (name, icons, theme, display: standalone)
+- `sw.ts` — Serwist service worker (precaching, runtime caching, offline fallback)
+- `serwist.ts` — Client-side `SerwistProvider` re-export for layout
+- `~offline/page.tsx` — Static offline fallback with OAA branding
+- Build requires `--webpack` flag (Serwist incompatible with Turbopack)
