@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl';
 import { useUIStore } from '@/store/ui';
 import { useRouter, usePathname } from '@/i18n/navigation';
-import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 function SunIcon({ size = 16 }: { size?: number }) {
   return (
@@ -59,7 +58,6 @@ export function ThemeLocaleToggles({ iconSize = 16, className = '' }: ThemeLocal
   const { theme, setTheme, locale, setLocale } = useUIStore();
 
   const isDark = theme === 'dark';
-  const { canInstall, promptInstall } = usePWAInstall();
 
   const toggleTheme = () => {
     const next = isDark ? 'light' : 'dark';
@@ -79,29 +77,6 @@ export function ThemeLocaleToggles({ iconSize = 16, className = '' }: ThemeLocal
 
   return (
     <div className={`flex items-center gap-1 ${className}`}>
-      {canInstall && (
-        <button
-          onClick={promptInstall}
-          className="mr-1 hidden items-center gap-1.5 border border-border-default px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:border-text-primary hover:text-text-primary sm:flex"
-          aria-label={t('common.installApp')}
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          {t('common.installApp')}
-        </button>
-      )}
       <button
         onClick={toggleLocale}
         className="px-2 py-1 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"

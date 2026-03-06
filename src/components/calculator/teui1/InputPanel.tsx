@@ -84,9 +84,9 @@ export function InputPanel({ building, onUpdate }: InputPanelProps) {
   const [activeTab, setActiveTab] = useState<TabKey>('building');
 
   return (
-    <div className="flex h-full">
-      {/* Vertical tab sidebar */}
-      <div className="flex w-14 shrink-0 flex-col border-r border-border-default bg-bg-base">
+    <div className="flex h-full flex-col md:flex-row">
+      {/* Desktop: Vertical tab sidebar (hidden on mobile) */}
+      <div className="hidden w-14 shrink-0 flex-col border-r border-border-default bg-bg-base md:flex">
         {TABS.map((tab) => (
           <button
             key={tab}
@@ -112,20 +112,44 @@ export function InputPanel({ building, onUpdate }: InputPanelProps) {
       </div>
 
       {/* Tab content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {/* Tab header */}
-        <div className="border-b border-border-default px-6 py-4">
+        <div className="border-b border-border-default px-4 py-4 md:px-6">
           <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">
             {t(activeTab)}
           </span>
         </div>
 
-        <div className="px-6 pt-6">
+        <div className="px-4 pb-6 pt-6 md:px-6">
           {activeTab === 'building' && <BuildingTab building={building} onUpdate={onUpdate} />}
           {activeTab === 'energy' && <EnergyBillsTab building={building} onUpdate={onUpdate} />}
           {activeTab === 'renewables' && <RenewablesTab building={building} onUpdate={onUpdate} />}
           {activeTab === 'project' && <ProjectTab building={building} onUpdate={onUpdate} />}
         </div>
+      </div>
+
+      {/* Mobile: Bottom nav bar (hidden on desktop) */}
+      <div className="order-last flex shrink-0 border-t border-border-default bg-bg-base md:hidden">
+        {TABS.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`group relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2 transition-all ${
+              activeTab === tab ? 'text-text-primary' : 'text-text-tertiary'
+            }`}
+            aria-selected={activeTab === tab}
+            role="tab"
+          >
+            {/* Active indicator */}
+            {activeTab === tab && (
+              <div className="absolute left-0 right-0 top-0 h-0.5 bg-text-primary" />
+            )}
+            {TAB_ICONS[tab]}
+            <span className="text-[7px] font-bold uppercase tracking-widest">
+              {t(tab).slice(0, 5)}
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );

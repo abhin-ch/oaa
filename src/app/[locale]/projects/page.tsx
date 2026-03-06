@@ -7,6 +7,7 @@ import { useRouter } from '@/i18n/navigation';
 import type { BuildingSummary } from '@/schema/building';
 import { Header } from '@/components/layout/Header';
 import { DotGrid } from '@/components/layout/DotGrid';
+import { formatDate } from '@/lib/formatDate';
 
 type Filter = 'all' | 'archived';
 
@@ -40,20 +41,6 @@ export default function ProjectsPage() {
 
   const handleOpen = (id: string) => {
     router.push(`/project/${id}`);
-  };
-
-  const formatDate = (iso: string) => {
-    try {
-      return new Date(iso)
-        .toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-        })
-        .toUpperCase();
-    } catch {
-      return iso;
-    }
   };
 
   const filters: { key: Filter; label: string }[] = [

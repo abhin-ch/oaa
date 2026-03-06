@@ -180,5 +180,3 @@ export function EnergyBars({ breakdown, result }: EnergyMixProps) {
     </div>
   );
 }
-
-export { EnergyBars as EnergyMix };

@@ -1,24 +1,18 @@
 'use client';
 
-import { useMemo } from 'react';
-import * as THREE from 'three';
+import { COLOR, MAT } from './materials';
 
 export function SankeyCard() {
-  const matCard = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.9 }),
-    [],
-  );
-
   const flows = [
-    { y: 0.25, w: 0.5, color: '#1a1a1a' },
-    { y: 0.05, w: 0.35, color: '#525252' },
-    { y: -0.15, w: 0.22, color: '#a3a3a3' },
+    { y: 0.25, w: 0.5, color: COLOR.DARK },
+    { y: 0.05, w: 0.35, color: COLOR.DARK_GRAY },
+    { y: -0.15, w: 0.22, color: COLOR.MEDIUM },
   ];
 
   return (
     <group position={[-2.2, -1.2, 2.5]}>
       {/* Card */}
-      <mesh material={matCard}>
+      <mesh material={MAT.card}>
         <boxGeometry args={[1.6, 1.1, 0.04]} />
       </mesh>
       {/* Source bars */}

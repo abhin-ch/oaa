@@ -9,15 +9,11 @@ import { useRouter } from '@/i18n/navigation';
 import { useTEUI1 } from '@/hooks/useTEUI1';
 import type { Building } from '@/schema/building';
 import { Header } from '@/components/layout/Header';
-import { DotGrid } from '@/components/layout/DotGrid';
 import { SaveCalculationModal } from '@/components/calculator/SaveCalculationModal';
+import { DotGrid } from '@/components/layout/DotGrid';
 import { InputPanel } from './InputPanel';
 import { ResultsPanel } from './results/ResultsPanel';
 
-/**
- * Create a clean draft Building for a new calculator session.
- * Keeps project identity (id, meta) but clears calculator inputs.
- */
 function createFreshDraft(building: Building): Building {
   return {
     ...building,
@@ -38,15 +34,12 @@ export function TEUI1Calculator() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
-  // Local draft — never auto-persisted to IndexedDB
   const [draft, setDraft] = useState<Building | null>(null);
 
-  // Initialize draft on mount
   useEffect(() => {
     if (!building) return;
 
     if (activeSavedCalcId) {
-      // Load saved calculations then restore from snapshot
       void loadSavedCalculations().then(() => {
         const saved = useProjectStore
           .getState()
@@ -69,7 +62,6 @@ export function TEUI1Calculator() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [building?.id, activeSavedCalcId]);
 
-  // Local updater — merges changes into draft without touching the store
   const updateDraft = useCallback((changes: Partial<Building>) => {
     setDraft((prev) => {
       if (!prev) return prev;
@@ -84,7 +76,6 @@ export function TEUI1Calculator() {
   const occupancyKey = typeof draft.occupancy === 'string' ? draft.occupancy : 'residential';
   const isEditing = !!activeSavedCalcId;
 
-  // Temporarily swap draft inputs onto the store for save, then restore
   const withDraftOnStore = async (fn: () => Promise<void>) => {
     const original = useProjectStore.getState().building;
     if (original) {
@@ -131,126 +122,159 @@ export function TEUI1Calculator() {
   };
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
-      <Header />
-
-      <main
-        id="main-content"
-        className="relative flex-1 overflow-y-auto bg-bg-base md:overflow-hidden"
+    <>
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          background: 'var(--bg-base)',
+        }}
       >
+        {/* Dot grid background */}
         <DotGrid />
-        <div className="relative z-10 mx-auto flex min-h-full max-w-6xl flex-col px-4 py-6 md:h-full md:px-6 md:py-16">
-          {/* Page header — compact on mobile */}
-          <div className="flex items-center gap-3 md:flex-col md:gap-6">
-            <div className="flex flex-1 items-start gap-3 md:w-full md:flex-row md:items-end md:justify-between">
-              <div className="flex items-start gap-3 md:gap-4">
-                <button
-                  onClick={() => {
-                    setActiveSavedCalcId(null);
-                    router.push(`/project/${building.id}`);
-                  }}
-                  className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center border border-border-default bg-bg-base text-text-tertiary transition-all hover:border-text-primary hover:text-text-primary active:scale-95 md:mt-1.5 md:h-9 md:w-9"
-                  aria-label={t('common.back')}
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M19 12H5" />
-                    <path d="m12 19-7-7 7-7" />
-                  </svg>
-                </button>
-                <div>
-                  <h1 className="text-xl font-bold tracking-tight text-text-primary md:text-4xl">
-                    {building.meta.name || t('buildings.namePlaceholder')}
-                  </h1>
-                  <p className="mt-0.5 text-xs leading-relaxed text-text-tertiary md:mt-1 md:text-sm">
-                    {t(`buildings.types.${occupancyKey}` as Parameters<typeof t>[0])} &mdash;{' '}
-                    {t('teui1.title')}
-                  </p>
-                </div>
-              </div>
 
+        {/* Header */}
+        <Header />
+
+        {/* Title bar — compact */}
+        <div className="relative z-[1] shrink-0 px-4 py-2 md:px-6 md:py-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
               <button
-                onClick={handleSaveClick}
-                className="shrink-0 bg-text-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-text-inverse transition-all hover:opacity-90 active:scale-[0.98] md:flex md:h-12 md:items-center md:gap-2 md:px-7 md:text-sm"
+                onClick={() => {
+                  setActiveSavedCalcId(null);
+                  router.push(`/project/${building.id}`);
+                }}
+                className="flex h-7 w-7 shrink-0 items-center justify-center border border-border-default bg-bg-base text-text-tertiary transition-all hover:border-text-primary hover:text-text-primary active:scale-95"
+                aria-label={t('common.back')}
               >
-                {t('common.saveChanges')}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile: collapsible TEUI summary */}
-          <div className="mt-4 border border-border-default bg-bg-base md:hidden">
-            <button
-              onClick={() => setShowResults((v) => !v)}
-              className="flex w-full items-center justify-between px-4 py-2.5"
-            >
-              <div className="flex items-baseline gap-2">
-                <span className="font-mono text-2xl font-bold tabular-nums text-text-primary">
-                  {result.teui.toFixed(1)}
-                </span>
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-text-tertiary">
-                  {t('teui1.results.teuiUnit')}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 text-text-tertiary">
-                <span className="text-[10px] font-semibold uppercase tracking-widest">
-                  {showResults ? t('teui1.hideResults') : t('teui1.showResults')}
-                </span>
                 <svg
-                  width="12"
-                  height="12"
+                  width="14"
+                  height="14"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2.5"
-                  className={`transition-transform ${showResults ? 'rotate-180' : ''}`}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <polyline points="6 9 12 15 18 9" />
+                  <path d="M19 12H5" />
+                  <path d="m12 19-7-7 7-7" />
                 </svg>
+              </button>
+              <div>
+                <h1 className="text-lg font-bold tracking-tight text-text-primary md:text-2xl">
+                  {building.meta.name || t('buildings.namePlaceholder')}
+                </h1>
+                <p className="text-[10px] leading-tight text-text-tertiary md:text-xs">
+                  {t(`buildings.types.${occupancyKey}` as Parameters<typeof t>[0])} &mdash;{' '}
+                  {t('teui1.title')}
+                </p>
               </div>
+            </div>
+
+            <button
+              onClick={handleSaveClick}
+              className="shrink-0 bg-text-primary px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-text-inverse transition-all hover:opacity-90 active:scale-[0.98] md:px-6 md:py-2 md:text-xs"
+            >
+              {t('common.saveChanges')}
             </button>
-            {showResults && (
-              <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="max-h-[60vh] overflow-y-auto border-t border-border-default bg-bg-raised"
-              >
+          </div>
+        </div>
+
+        {/* Workspace — fills ALL remaining height */}
+        <main
+          id="main-content"
+          style={{
+            flex: '1 1 0%',
+            minHeight: 0,
+            overflow: 'hidden',
+            padding: '0 1rem 0.5rem',
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+          className="md:!px-6 md:!pb-3"
+        >
+          {/* Mobile: toggle between Build / Results */}
+          <div className="mb-2 flex shrink-0 md:hidden">
+            <button
+              onClick={() => setShowResults(false)}
+              className={`flex-1 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.15em] transition-colors ${
+                !showResults
+                  ? 'border-b-2 border-text-primary text-text-primary'
+                  : 'border-b border-border-default text-text-tertiary'
+              }`}
+            >
+              {t('teui1.tabs.building')}
+            </button>
+            <button
+              onClick={() => setShowResults(true)}
+              className={`flex-1 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.15em] transition-colors ${
+                showResults
+                  ? 'border-b-2 border-text-primary text-text-primary'
+                  : 'border-b border-border-default text-text-tertiary'
+              }`}
+            >
+              {t('teui1.results.title')}
+              {result.teui > 0 && (
+                <span className="ml-2 font-mono tabular-nums">{result.teui.toFixed(1)}</span>
+              )}
+            </button>
+          </div>
+
+          {/* Mobile: full-screen single panel */}
+          <div className="flex min-h-0 flex-1 flex-col border border-border-default bg-bg-base md:hidden">
+            {showResults ? (
+              <div style={{ flex: '1 1 0%', overflow: 'hidden', minHeight: 0 }}>
                 <ResultsPanel result={result} building={draft} />
-              </motion.div>
+              </div>
+            ) : (
+              <div
+                style={{ flex: '1 1 0%', minHeight: 0, display: 'flex', flexDirection: 'column' }}
+              >
+                <InputPanel building={draft} onUpdate={updateDraft} />
+              </div>
             )}
           </div>
 
-          {/* Two-panel bordered box — scrollable on mobile, fixed height on desktop */}
-          <div className="mt-4 flex min-h-0 flex-1 flex-col border border-border-default bg-bg-base md:mt-10 md:flex-row md:overflow-hidden">
-            {/* Left panel — inputs */}
-            <div className="flex w-full flex-col md:w-[45%] md:shrink-0 md:overflow-y-auto md:border-r md:border-border-default">
+          {/* Desktop: Two-panel grid — h-full forces it to fill the main exactly */}
+          <div
+            className="hidden min-h-0 flex-1 border border-border-default bg-bg-base md:grid"
+            style={{
+              gridTemplateColumns: 'minmax(340px, 45fr) 55fr',
+              gridTemplateRows: 'minmax(0, 1fr)',
+              overflow: 'hidden',
+              minHeight: 0,
+            }}
+          >
+            {/* Left panel — scrollable inputs */}
+            <div
+              style={{ overflowY: 'auto', minHeight: 0 }}
+              className="border-r border-border-default"
+            >
               <InputPanel building={draft} onUpdate={updateDraft} />
             </div>
 
-            {/* Right panel — desktop only */}
-            <div className="hidden flex-1 md:block">
-              <div className="h-full">
+            {/* Right panel */}
+            <div style={{ minHeight: 0, overflow: 'hidden' }}>
+              <div style={{ height: '100%', overflow: 'hidden' }}>
                 <ResultsPanel result={result} building={draft} />
               </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
 
-      {/* Save modal — only for new calculations */}
       <SaveCalculationModal
         open={showSaveModal}
         onClose={() => setShowSaveModal(false)}
         onSave={handleSaveNew}
       />
-    </div>
+    </>
   );
 }

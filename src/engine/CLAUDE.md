@@ -40,5 +40,3 @@ CO2:  1 m3 gas -> 1.888 kgCO2
 - `teui2.ts` — Extended: occupancy normalization, benchmarks
 - `teui3.ts` — Full energy balance: envelope + systems + 3 parallel models
 - `teui4.ts` — Real-time dual-model with Sankey + optimization
-
-Shared utilities (`shared/units.ts`, `shared/climate.ts`, `shared/carbon.ts`, `shared/benchmarks.ts`) were removed — will be rebuilt when TEUI2+ are implemented.

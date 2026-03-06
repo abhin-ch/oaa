@@ -3,29 +3,26 @@
 import { useMemo } from 'react';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
+import { COLOR, MAT } from './materials';
 
 export function EnergyMeter() {
-  const matCard = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.9 }),
-    [],
-  );
   const matScreen = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#111111', roughness: 0.5 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.VERY_DARK, roughness: 0.5 }),
     [],
   );
   const matGauge = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#e5e5e5', roughness: 0.8 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.LIGHT, roughness: 0.8 }),
     [],
   );
   const matGaugeFill = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#1a1a1a', roughness: 0.6 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.DARK, roughness: 0.6 }),
     [],
   );
 
   return (
     <group position={[-3.2, 2.2, -0.8]}>
       {/* Card */}
-      <mesh material={matCard}>
+      <mesh material={MAT.card}>
         <boxGeometry args={[1.1, 1.4, 0.05]} />
       </mesh>
       {/* Screen */}

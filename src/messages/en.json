@@ -24,14 +24,7 @@
   },
   "nav": {
     "home": "Home",
-    "building": "Building",
-    "energy": "Energy",
-    "results": "Results",
-    "settings": "Settings",
     "projects": "Projects"
-  },
-  "header": {
-    "teuiVersion": "TEUI Version"
   },
   "meta": {
     "appName": "OAA TEUI",
@@ -260,7 +253,6 @@
   "errors": {
     "required": "This field is required",
     "positiveNumber": "Please enter a positive number",
-    "projectNotFound": "Project not found",
-    "offlineNoCache": "You are offline and this content is not available in cache"
+    "projectNotFound": "Project not found"
   }
 }

@@ -4,19 +4,16 @@ import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Group } from 'three';
 import * as THREE from 'three';
+import { COLOR, MAT } from './materials';
 
 export function HVACUnit() {
   const fanRef = useRef<Group>(null);
-  const matBody = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#e5e5e5', roughness: 0.85 }),
-    [],
-  );
   const matTop = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#a3a3a3', roughness: 0.8 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.MEDIUM, roughness: 0.8 }),
     [],
   );
   const matFan = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#525252', roughness: 0.7 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.DARK_GRAY, roughness: 0.7 }),
     [],
   );
 
@@ -27,7 +24,7 @@ export function HVACUnit() {
   return (
     <group position={[3.5, 1, -1.5]}>
       {/* Body */}
-      <mesh material={matBody}>
+      <mesh material={MAT.light}>
         <boxGeometry args={[0.8, 0.6, 0.8]} />
       </mesh>
       {/* Top accent */}

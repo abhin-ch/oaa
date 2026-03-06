@@ -8,7 +8,7 @@ All React UI components. Organized by function: base UI primitives, calculator w
 
 ```
 components/
-├── ui/               # shadcn/ui base components (Button, Input, Dialog, etc.)
+├── ui/               # shadcn/ui base components (Button, Card, Dialog, Input, Label, Sheet, Slider, Tabs)
 ├── calculator/       # Calculator workspace
 │   ├── SaveCalculationModal.tsx
 │   └── teui1/        # TEUI v1 calculator
@@ -33,16 +33,16 @@ components/
 │   ├── IsometricBuilding.tsx      # React Three Fiber building
 │   ├── IsometricScene.tsx
 │   ├── EnergyFlowBg.tsx
-│   └── building-parts/            # Isometric scene sub-components
+│   └── building-parts/            # Isometric scene sub-components + materials.ts (shared colors)
 ├── layout/           # App shell
 │   ├── Header.tsx
-│   ├── Sidebar.tsx
-│   ├── BottomTabBar.tsx
 │   ├── OfflineBanner.tsx
 │   ├── SkipToContent.tsx
+│   ├── ThemeLocaleToggles.tsx
 │   └── DotGrid.tsx
 └── project/
-    └── CalculatorCatalog.tsx      # Calculator selection grid
+    ├── CalculatorCatalog.tsx      # Calculator selection grid
+    └── Pagination.tsx             # Shared pagination controls
 ```
 
 ## Conventions
@@ -52,15 +52,3 @@ components/
 - Check `src/components/ui/` before building custom components
 - Calculator layout: 40/60 split (inputs left, live results right)
 - All charts/animations respect `prefers-reduced-motion`
-
-## Deleted Components (cleanup)
-
-These were removed as dead code — do not re-create:
-
-- `results/EnergyDonut.tsx` — replaced by inline donut in EnergyBars
-- `results/GHGICard.tsx` — inlined in ResultsPanel
-- `results/GradientBar.tsx` — inlined in ResultsPanel
-- `results/TEUIHeroNumber.tsx` — inlined in ResultsPanel
-- `results/WidgetCard.tsx` — never imported
-- `results/BuildingSchematic.tsx` — replaced by Building3D
-- `layout/AppShell.tsx` — each page has own Header + layout

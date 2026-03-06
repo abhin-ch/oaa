@@ -2,14 +2,15 @@
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
+import { COLOR } from './materials';
 
 export function SolarPanels() {
   const mat = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#1a1a1a', roughness: 0.5, metalness: 0.15 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.DARK, roughness: 0.5, metalness: 0.15 }),
     [],
   );
   const matFrame = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#525252', roughness: 0.7 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.DARK_GRAY, roughness: 0.7 }),
     [],
   );
 

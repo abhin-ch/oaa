@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MODAL_BACKDROP, MODAL_CONTENT } from '@/lib/animations';
+import { useModalControls } from '@/hooks/useModalControls';
 
 interface SaveCalculationModalProps {
   open: boolean;
@@ -15,22 +17,13 @@ export function SaveCalculationModal({ open, onClose, onSave }: SaveCalculationM
   const inputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState('');
 
+  useModalControls(open, onClose, inputRef);
+
   /* eslint-disable react-hooks/set-state-in-effect -- intentional reset on open */
   useEffect(() => {
-    if (open) {
-      setName('');
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    if (open) setName('');
   }, [open]);
   /* eslint-enable react-hooks/set-state-in-effect */
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (open) window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [open, onClose]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,10 +37,7 @@ export function SaveCalculationModal({ open, onClose, onSave }: SaveCalculationM
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            {...MODAL_BACKDROP}
             className="absolute inset-0 bg-bg-base/60 backdrop-blur-md"
             onClick={onClose}
             aria-hidden="true"
@@ -55,14 +45,7 @@ export function SaveCalculationModal({ open, onClose, onSave }: SaveCalculationM
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85, rotateX: -12, y: 40, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, scale: 1, rotateX: 0, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, scale: 0.9, rotateX: 8, y: -30, filter: 'blur(4px)' }}
-            transition={{
-              duration: 0.5,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            style={{ perspective: 1200 }}
+            {...MODAL_CONTENT}
             className="relative w-full max-w-md mx-4"
             role="dialog"
             aria-modal="true"

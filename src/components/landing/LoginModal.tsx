@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MODAL_BACKDROP, MODAL_CONTENT } from '@/lib/animations';
+import { useModalControls } from '@/hooks/useModalControls';
 
 interface LoginModalProps {
   open: boolean;
@@ -13,21 +15,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
   const t = useTranslations();
   const emailRef = useRef<HTMLInputElement>(null);
 
-  // Focus email input when modal opens
-  useEffect(() => {
-    if (open) {
-      setTimeout(() => emailRef.current?.focus(), 100);
-    }
-  }, [open]);
-
-  // Close on Escape
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (open) window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [open, onClose]);
+  useModalControls(open, onClose, emailRef);
 
   return (
     <AnimatePresence>
@@ -35,10 +23,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            {...MODAL_BACKDROP}
             className="absolute inset-0 bg-bg-base/60 backdrop-blur-md"
             onClick={onClose}
             aria-hidden="true"
@@ -46,14 +31,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85, rotateX: -12, y: 40, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, scale: 1, rotateX: 0, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, scale: 0.9, rotateX: 8, y: -30, filter: 'blur(4px)' }}
-            transition={{
-              duration: 0.5,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            style={{ perspective: 1200 }}
+            {...MODAL_CONTENT}
             className="relative w-full max-w-md mx-4"
             role="dialog"
             aria-modal="true"

@@ -3,21 +3,18 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { Edges } from '@react-three/drei';
+import { COLOR, MAT } from './materials';
 
 export function FloorPlanCard() {
-  const matCard = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.9 }),
-    [],
-  );
   const matGrid = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#e8e8e8', roughness: 0.9 }),
+    () => new THREE.MeshStandardMaterial({ color: COLOR.VERY_LIGHT, roughness: 0.9 }),
     [],
   );
 
   return (
     <group position={[2.8, -1.2, 2.2]}>
       {/* Card */}
-      <mesh material={matCard}>
+      <mesh material={MAT.card}>
         <boxGeometry args={[1.5, 1.2, 0.04]} />
       </mesh>
 

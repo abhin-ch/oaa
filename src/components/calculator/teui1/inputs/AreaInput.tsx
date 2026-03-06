@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ft2ToM2, m2ToFt2 } from '@/engine/teui1';
+import { parsePositiveNumber } from '@/lib/validation';
 
 interface AreaInputProps {
   valueM2: number;
@@ -19,11 +20,7 @@ export function AreaInput({ valueM2, onChange }: AreaInputProps) {
   const displayValue = unit === 'm2' ? valueM2 : m2ToFt2(valueM2);
 
   function handleChange(raw: string) {
-    const num = parseFloat(raw);
-    if (isNaN(num) || num < 0) {
-      onChange(0);
-      return;
-    }
+    const num = parsePositiveNumber(raw);
     onChange(unit === 'm2' ? num : ft2ToM2(num));
   }
 

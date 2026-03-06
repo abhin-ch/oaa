@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-interface Building {
+interface CanvasBuilding {
   x: number;
   width: number;
   height: number;
@@ -39,7 +39,7 @@ export function EnergyFlowBg() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let animationId: number;
-    let allBuildings: Building[][] = []; // [backRow, midRow, frontRow]
+    let allCanvasBuildings: CanvasBuilding[][] = []; // [backRow, midRow, frontRow]
     let isDark = document.documentElement.classList.contains('dark');
 
     // Watch for dark mode changes
@@ -48,11 +48,11 @@ export function EnergyFlowBg() {
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
-    const generateRow = (w: number, h: number, depth: number, seed: number): Building[] => {
+    const generateRow = (w: number, h: number, depth: number, seed: number): CanvasBuilding[] => {
       const rand = mulberry32(seed);
-      const row: Building[] = [];
-      const styles: Building['style'][] = ['grid', 'stripe', 'solid', 'curtainWall'];
-      const rooftops: Building['rooftop'][] = [
+      const row: CanvasBuilding[] = [];
+      const styles: CanvasBuilding['style'][] = ['grid', 'stripe', 'solid', 'curtainWall'];
+      const rooftops: CanvasBuilding['rooftop'][] = [
         'flat',
         'flat',
         'antenna',
@@ -107,7 +107,7 @@ export function EnergyFlowBg() {
     };
 
     const generateCity = (w: number, h: number) => {
-      allBuildings = [
+      allCanvasBuildings = [
         generateRow(w, h, 0, 111), // back — smaller, fainter
         generateRow(w, h, 1, 222), // mid
         generateRow(w, h, 2, 333), // front — largest, most visible
@@ -140,7 +140,7 @@ export function EnergyFlowBg() {
 
       ctx.clearRect(0, 0, w, h);
 
-      for (const row of allBuildings) {
+      for (const row of allCanvasBuildings) {
         const depth = row[0]?.depth ?? 2;
         const baselineY = h * (depth === 0 ? 0.94 : depth === 1 ? 0.97 : 1);
         const strokeAlpha = safeAlpha(opacityByDepth, depth);
@@ -162,7 +162,7 @@ export function EnergyFlowBg() {
             ? 0.35
             : (Math.sin(time * b.fillSpeed + b.fillPhase) + 1) / 2;
 
-          // Building outline
+          // CanvasBuilding outline
           ctx.strokeStyle = c(strokeAlpha);
           ctx.lineWidth = 1;
           ctx.strokeRect(bx, by, b.width, b.height);
@@ -216,7 +216,7 @@ export function EnergyFlowBg() {
       y: number,
       w: number,
       h: number,
-      b: Building,
+      b: CanvasBuilding,
       fillLevel: number,
     ) {
       const { windowCols: cols, windowRows: rows, depth } = b;
@@ -248,7 +248,7 @@ export function EnergyFlowBg() {
       y: number,
       w: number,
       h: number,
-      b: Building,
+      b: CanvasBuilding,
       fillLevel: number,
     ) {
       const { windowRows: rows, depth } = b;
@@ -273,7 +273,7 @@ export function EnergyFlowBg() {
       y: number,
       w: number,
       h: number,
-      b: Building,
+      b: CanvasBuilding,
       fillLevel: number,
     ) {
       const { windowCols: cols, windowRows: rows, depth } = b;
@@ -300,7 +300,7 @@ export function EnergyFlowBg() {
 
     function drawRooftop(
       ctx: CanvasRenderingContext2D,
-      b: Building,
+      b: CanvasBuilding,
       bx: number,
       by: number,
       alpha: number,

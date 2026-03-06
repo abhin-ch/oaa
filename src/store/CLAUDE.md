@@ -7,7 +7,7 @@ Zustand state management stores. Reactive layer between UI and data.
 ## Files
 
 - `project.ts` — Project CRUD, building data, saved calculations, IndexedDB persistence (via Dexie)
-- `ui.ts` — UI state: theme, locale, sidebar, active calculator tab
+- `ui.ts` — UI state: theme, locale, active calculator, active saved calculation
 
 ## Key Patterns
 
@@ -37,5 +37,5 @@ User Input -> Component -> store.updateBuilding(partial)
 
 ## Store: ui.ts
 
-- `theme`, `locale`, `sidebarOpen`, `activeCalculatorTab`
-- Actions: `setTheme`, `setLocale`, `toggleSidebar`, `setActiveCalculatorTab`
+- `theme`, `locale`, `activeCalculator`, `activeSavedCalcId`
+- Actions: `setTheme`, `setLocale`, `setActiveCalculator`, `setActiveSavedCalcId`

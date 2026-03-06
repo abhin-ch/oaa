@@ -3,6 +3,7 @@
 import { useId } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { parsePositiveNumber } from '@/lib/validation';
 
 interface EnergySourceInputProps {
   label: string;
@@ -24,8 +25,7 @@ export function EnergySourceInput({
   const id = useId();
 
   function handleChange(raw: string) {
-    const num = parseFloat(raw);
-    onChange(isNaN(num) || num < 0 ? 0 : num);
+    onChange(parsePositiveNumber(raw));
   }
 
   return (

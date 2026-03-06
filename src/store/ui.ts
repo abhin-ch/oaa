@@ -19,11 +19,6 @@ interface UIState {
   // Language
   locale: Locale;
   setLocale: (locale: Locale) => void;
-
-  // Layout
-  sidebarOpen: boolean;
-  toggleSidebar: () => void;
-  setSidebarOpen: (open: boolean) => void;
 }
 
 export const useUIStore = create<UIState>()((set) => ({
@@ -38,8 +33,4 @@ export const useUIStore = create<UIState>()((set) => ({
 
   locale: 'en',
   setLocale: (locale: Locale) => set({ locale }),
-
-  sidebarOpen: true,
-  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
 }));

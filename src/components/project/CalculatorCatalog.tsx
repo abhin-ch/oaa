@@ -8,8 +8,17 @@ import { useRouter } from '@/i18n/navigation';
 import { Header } from '@/components/layout/Header';
 import { DotGrid } from '@/components/layout/DotGrid';
 import { CALCULATORS, CATEGORIES, type CalculatorCategory } from '@/engine/calculators';
+import { formatDate } from '@/lib/formatDate';
+import { Pagination } from './Pagination';
 
 type CatalogTab = 'my-calculations' | 'search-calculations';
+
+const CATEGORY_DOT_COLOR: Record<CalculatorCategory, string> = {
+  energy: 'bg-amber-400',
+  carbon: 'bg-emerald-400',
+  compliance: 'bg-blue-400',
+  water: 'bg-cyan-400',
+};
 
 export function CalculatorCatalog() {
   const t = useTranslations();
@@ -50,20 +59,6 @@ export function CalculatorCatalog() {
   const handleSearchChange = (value: string) => {
     setSearch(value);
     setPage(1);
-  };
-
-  const formatDate = (iso: string) => {
-    try {
-      return new Date(iso)
-        .toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-        })
-        .toUpperCase();
-    } catch {
-      return iso;
-    }
   };
 
   const handleSelect = (calcId: string, savedCalcId?: string) => {
@@ -304,44 +299,15 @@ export function CalculatorCatalog() {
                   ))}
                 </div>
 
-                {/* Pagination footer */}
-                <div className="flex items-center justify-between border-t border-border-default px-6 py-3">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-text-tertiary">
-                    {t('catalog.showingSavedCount', {
-                      count: paginatedSaved.length,
-                      total: savedCalculations.length,
-                    })}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <button
-                      disabled={savedPage <= 1}
-                      onClick={() => setSavedPage(savedPage - 1)}
-                      className="flex h-7 w-7 items-center justify-center border border-border-default text-xs text-text-tertiary transition-colors hover:text-text-primary disabled:opacity-40"
-                    >
-                      &lt;
-                    </button>
-                    {Array.from({ length: savedTotalPages }, (_, i) => i + 1).map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => setSavedPage(p)}
-                        className={`flex h-7 w-7 items-center justify-center border text-xs font-semibold ${
-                          p === savedPage
-                            ? 'border-text-primary bg-text-primary text-text-inverse'
-                            : 'border-border-default text-text-tertiary transition-colors hover:text-text-primary'
-                        }`}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                    <button
-                      disabled={savedPage >= savedTotalPages}
-                      onClick={() => setSavedPage(savedPage + 1)}
-                      className="flex h-7 w-7 items-center justify-center border border-border-default text-xs text-text-tertiary transition-colors hover:text-text-primary disabled:opacity-40"
-                    >
-                      &gt;
-                    </button>
-                  </div>
-                </div>
+                <Pagination
+                  page={savedPage}
+                  totalPages={savedTotalPages}
+                  onPageChange={setSavedPage}
+                  label={t('catalog.showingSavedCount', {
+                    count: paginatedSaved.length,
+                    total: savedCalculations.length,
+                  })}
+                />
               </div>
             )
           ) : (
@@ -411,17 +377,7 @@ export function CalculatorCatalog() {
                             : 'border-border-default text-text-tertiary hover:text-text-secondary md:border-0'
                         }`}
                       >
-                        <span
-                          className={`h-2 w-2 rounded-full ${
-                            key === 'energy'
-                              ? 'bg-amber-400'
-                              : key === 'carbon'
-                                ? 'bg-emerald-400'
-                                : key === 'compliance'
-                                  ? 'bg-blue-400'
-                                  : 'bg-cyan-400'
-                          }`}
-                        />
+                        <span className={`h-2 w-2 rounded-full ${CATEGORY_DOT_COLOR[key]}`} />
                         <span>{t(`catalog.categories.${key}` as Parameters<typeof t>[0])}</span>
                         <span className="font-mono text-[10px] text-text-tertiary">{count}</span>
                       </button>
@@ -464,15 +420,7 @@ export function CalculatorCatalog() {
                         {/* Name + description */}
                         <div className="flex items-center gap-3">
                           <span
-                            className={`h-2 w-2 shrink-0 rounded-full ${
-                              calc.category === 'energy'
-                                ? 'bg-amber-400'
-                                : calc.category === 'carbon'
-                                  ? 'bg-emerald-400'
-                                  : calc.category === 'compliance'
-                                    ? 'bg-blue-400'
-                                    : 'bg-cyan-400'
-                            } ${!calc.available ? 'opacity-30' : ''}`}
+                            className={`h-2 w-2 shrink-0 rounded-full ${CATEGORY_DOT_COLOR[calc.category]} ${!calc.available ? 'opacity-30' : ''}`}
                           />
                           <div className="flex flex-col">
                             <span
@@ -529,44 +477,15 @@ export function CalculatorCatalog() {
                   )}
                 </div>
 
-                {/* Pagination footer */}
-                <div className="flex items-center justify-between border-t border-border-default px-6 py-3">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-text-tertiary">
-                    {t('buildings.showingCount', {
-                      count: paginated.length,
-                      total: filtered.length,
-                    })}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <button
-                      disabled={page <= 1}
-                      onClick={() => setPage(page - 1)}
-                      className="flex h-7 w-7 items-center justify-center border border-border-default text-xs text-text-tertiary transition-colors hover:text-text-primary disabled:opacity-40"
-                    >
-                      &lt;
-                    </button>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => setPage(p)}
-                        className={`flex h-7 w-7 items-center justify-center border text-xs font-semibold ${
-                          p === page
-                            ? 'border-text-primary bg-text-primary text-text-inverse'
-                            : 'border-border-default text-text-tertiary transition-colors hover:text-text-primary'
-                        }`}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                    <button
-                      disabled={page >= totalPages}
-                      onClick={() => setPage(page + 1)}
-                      className="flex h-7 w-7 items-center justify-center border border-border-default text-xs text-text-tertiary transition-colors hover:text-text-primary disabled:opacity-40"
-                    >
-                      &gt;
-                    </button>
-                  </div>
-                </div>
+                <Pagination
+                  page={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
+                  label={t('buildings.showingCount', {
+                    count: paginated.length,
+                    total: filtered.length,
+                  })}
+                />
               </div>
             </div>
           )}
