@@ -20,7 +20,7 @@ export function RenewablesTab({ building, onUpdate }: RenewablesTabProps) {
   }
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="space-y-4 pb-4">
       <EnergySourceInput
         label={t('onSite')}
         unit="kWh"

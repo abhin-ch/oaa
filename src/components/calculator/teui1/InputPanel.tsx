@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import type { Building } from '@/schema/building';
 import { BuildingTab } from './inputs/BuildingTab';
@@ -82,6 +82,32 @@ const TAB_ICONS: Record<TabKey, React.ReactNode> = {
 export function InputPanel({ building, onUpdate }: InputPanelProps) {
   const t = useTranslations('teui1.tabs');
   const [activeTab, setActiveTab] = useState<TabKey>('building');
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      const form = formRef.current;
+      if (!form) return;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const inputs = Array.from(
+        (form as any).querySelectorAll('input, select, textarea'),
+      ) as HTMLElement[];
+      const target = e.target as HTMLElement;
+      const idx = inputs.indexOf(target);
+      if (idx >= 0 && idx < inputs.length - 1) {
+        inputs[idx + 1].focus();
+      } else if (idx === inputs.length - 1) {
+        const tabIdx = TABS.indexOf(activeTab);
+        const nextTab = TABS[tabIdx + 1];
+        if (nextTab) {
+          setActiveTab(nextTab);
+        }
+      }
+    },
+    [activeTab],
+  );
 
   return (
     <div className="flex h-full flex-col md:flex-row">
@@ -114,18 +140,23 @@ export function InputPanel({ building, onUpdate }: InputPanelProps) {
       {/* Tab content */}
       <div className="min-h-0 flex-1 overflow-y-auto">
         {/* Tab header */}
-        <div className="border-b border-border-default px-4 py-4 md:px-6">
+        <div className="border-b border-border-default px-4 py-2.5 md:px-5">
           <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">
             {t(activeTab)}
           </span>
         </div>
 
-        <div className="px-4 pb-6 pt-6 md:px-6">
+        <form
+          ref={formRef}
+          className="px-4 pb-4 pt-4 md:px-5"
+          onSubmit={(e) => e.preventDefault()}
+          onKeyDown={handleKeyDown}
+        >
           {activeTab === 'building' && <BuildingTab building={building} onUpdate={onUpdate} />}
           {activeTab === 'energy' && <EnergyBillsTab building={building} onUpdate={onUpdate} />}
           {activeTab === 'renewables' && <RenewablesTab building={building} onUpdate={onUpdate} />}
           {activeTab === 'project' && <ProjectTab building={building} onUpdate={onUpdate} />}
-        </div>
+        </form>
       </div>
 
       {/* Mobile: Bottom nav bar (hidden on desktop) */}

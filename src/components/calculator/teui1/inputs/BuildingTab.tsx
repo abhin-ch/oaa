@@ -24,19 +24,19 @@ export function BuildingTab({ building, onUpdate }: BuildingTabProps) {
   const tl = useTranslations('teui1.building');
 
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-5 pb-4">
       {/* Building Type Selector */}
       <div>
-        <label className="mb-4 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
+        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
           {tl('typology')}
         </label>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-1.5">
           {BUILDING_TYPES.map((type) => (
             <button
               key={type}
               type="button"
               onClick={() => onUpdate({ occupancy: type })}
-              className={`border px-4 py-3 text-left text-sm font-medium transition-all ${
+              className={`border px-3 py-2 text-left text-sm font-medium transition-all ${
                 building.occupancy === type
                   ? 'border-text-primary bg-text-primary text-text-inverse'
                   : 'border-border-default bg-bg-surface text-text-secondary hover:border-border-strong'

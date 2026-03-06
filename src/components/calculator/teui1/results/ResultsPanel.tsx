@@ -30,20 +30,6 @@ export function ResultsPanel({ result, building }: ResultsPanelProps) {
 
   const pos = result.gradientPosition;
 
-  if (!hasAnything) {
-    return (
-      <div
-        style={{ height: '100%', overflow: 'hidden' }}
-        className="flex flex-col items-center justify-center px-8 bg-bg-raised"
-      >
-        <Building3D occupancy={occupancy} area={0} hasEnergy={false} />
-        <p className="mt-4 max-w-[240px] text-center text-xs leading-relaxed text-text-tertiary">
-          {t('results.noData')}
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div
       style={{
@@ -165,51 +151,79 @@ export function ResultsPanel({ result, building }: ResultsPanelProps) {
             <div className="pointer-events-none absolute bottom-0 h-8 w-full bg-gradient-to-t from-bg-raised to-transparent" />
           </div>
 
-          {/* Bottom metrics — compact */}
-          {hasEnergy ? (
-            <div className="relative z-10">
-              <div className="grid grid-cols-3 gap-px bg-border-default">
-                <div className="bg-bg-base px-3 py-2">
-                  <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">
-                    {t('results.totalEnergy')}
-                  </p>
-                  <div className="mt-1">
-                    <AnimatedNumber
-                      value={result.totalEnergyKwh}
-                      decimals={0}
-                      className="font-mono text-base font-extrabold tabular-nums text-text-primary"
-                    />
-                    <span className="ml-1 text-[9px] font-bold text-text-secondary">kWh</span>
-                  </div>
+          {/* Bottom metrics — always visible */}
+          <div className="relative z-10">
+            <div className="grid grid-cols-3 gap-px bg-border-default">
+              <div className="bg-bg-base px-3 py-2">
+                <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">
+                  {t('results.totalEnergy')}
+                </p>
+                <div className="mt-1">
+                  {hasEnergy ? (
+                    <>
+                      <AnimatedNumber
+                        value={result.totalEnergyKwh}
+                        decimals={0}
+                        className="font-mono text-base font-extrabold tabular-nums text-text-primary"
+                      />
+                      <span className="ml-1 text-[9px] font-bold text-text-secondary">kWh</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-mono text-base font-extrabold tabular-nums text-text-tertiary">
+                        --
+                      </span>
+                      <span className="ml-1 text-[9px] font-bold text-text-tertiary">kWh</span>
+                    </>
+                  )}
                 </div>
+              </div>
 
-                <div className="bg-bg-base px-3 py-2">
-                  <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">
-                    {t('results.netEnergy')}
-                  </p>
-                  <div className="mt-1">
-                    <AnimatedNumber
-                      value={result.netEnergyKwh}
-                      decimals={0}
-                      className="font-mono text-base font-extrabold tabular-nums text-text-primary"
-                    />
-                    <span className="ml-1 text-[9px] font-bold text-text-secondary">kWh</span>
-                  </div>
+              <div className="bg-bg-base px-3 py-2">
+                <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">
+                  {t('results.netEnergy')}
+                </p>
+                <div className="mt-1">
+                  {hasEnergy ? (
+                    <>
+                      <AnimatedNumber
+                        value={result.netEnergyKwh}
+                        decimals={0}
+                        className="font-mono text-base font-extrabold tabular-nums text-text-primary"
+                      />
+                      <span className="ml-1 text-[9px] font-bold text-text-secondary">kWh</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-mono text-base font-extrabold tabular-nums text-text-tertiary">
+                        --
+                      </span>
+                      <span className="ml-1 text-[9px] font-bold text-text-tertiary">kWh</span>
+                    </>
+                  )}
                 </div>
+              </div>
 
-                <div className="bg-bg-base px-3 py-2">
-                  <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">
-                    {t('results.ghgiUnit')}
-                  </p>
-                  <div className="mt-1">
+              <div className="bg-bg-base px-3 py-2">
+                <p className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary">
+                  {t('results.ghgiUnit')}
+                </p>
+                <div className="mt-1">
+                  {hasEnergy ? (
                     <AnimatedNumber
                       value={result.ghgi.kgCo2PerM2}
                       decimals={2}
                       className="font-mono text-base font-extrabold tabular-nums text-text-primary"
                     />
-                  </div>
-                  <div className="mt-1 flex items-center gap-1.5">
-                    <div className="h-1.5 flex-1 bg-bg-raised">
+                  ) : (
+                    <span className="font-mono text-base font-extrabold tabular-nums text-text-tertiary">
+                      --
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1 flex items-center gap-1.5">
+                  <div className="h-1.5 flex-1 bg-bg-raised">
+                    {hasEnergy && (
                       <motion.div
                         className="h-full bg-text-secondary"
                         initial={prefersReducedMotion ? undefined : { width: 0 }}
@@ -218,17 +232,15 @@ export function ResultsPanel({ result, building }: ResultsPanelProps) {
                         }}
                         transition={{ duration: 0.4 }}
                       />
-                    </div>
-                    <span className="font-mono text-[9px] font-bold tabular-nums text-text-secondary">
-                      {result.ghgi.mtCo2Total.toFixed(1)} MT
-                    </span>
+                    )}
                   </div>
+                  <span className="font-mono text-[9px] font-bold tabular-nums text-text-secondary">
+                    {hasEnergy ? `${result.ghgi.mtCo2Total.toFixed(1)} MT` : '-- MT'}
+                  </span>
                 </div>
               </div>
             </div>
-          ) : (
-            <div />
-          )}
+          </div>
         </div>
       ) : (
         /* Energy Mix tab */

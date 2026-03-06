@@ -24,8 +24,8 @@ export function ProjectTab({ building, onUpdate }: ProjectTabProps) {
   }
 
   return (
-    <div className="space-y-6 pb-8">
-      <div className="space-y-3">
+    <div className="space-y-4 pb-4">
+      <div className="space-y-2">
         <Label
           htmlFor={beginId}
           className="text-xs font-semibold uppercase tracking-wider text-text-secondary"
@@ -41,7 +41,7 @@ export function ProjectTab({ building, onUpdate }: ProjectTabProps) {
         />
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         <Label
           htmlFor={endId}
           className="text-xs font-semibold uppercase tracking-wider text-text-secondary"

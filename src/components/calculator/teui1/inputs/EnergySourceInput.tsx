@@ -29,7 +29,7 @@ export function EnergySourceInput({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <Label
         htmlFor={id}
         className="text-xs font-semibold uppercase tracking-wider text-text-secondary"

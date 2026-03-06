@@ -25,7 +25,7 @@ export function AreaInput({ valueM2, onChange }: AreaInputProps) {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-1.5">
       <Label
         htmlFor={id}
         className="text-xs font-semibold uppercase tracking-wider text-text-secondary"
