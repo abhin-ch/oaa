@@ -35,11 +35,12 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
     if (downloading) return;
     setDownloading(true);
 
-    // Pre-open window synchronously (while we still have user gesture context)
-    // so iOS Safari won't block it. Only needed as a fallback.
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    // Detect mobile + share capability before async work begins
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const canShareFiles =
       typeof navigator.share === 'function' && typeof navigator.canShare === 'function';
+    // iOS fallback: pre-open window synchronously while user gesture is active
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     let preOpenedWindow: Window | null = null;
     if (isIOS && !canShareFiles) {
       preOpenedWindow = window.open('', '_blank');
@@ -306,28 +307,41 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
       const fileName = `${projectName}_TEUI-v1_${date}.pdf`;
 
       const blob = pdf.output('blob');
+      let shared = false;
 
-      if (isIOS) {
-        // iOS: prefer Web Share API (native share sheet → Save to Files, AirDrop, etc.)
+      // Mobile: try Web Share API first (works on both iOS and Android)
+      if (isMobile && canShareFiles) {
         const file = new File([blob], fileName, { type: 'application/pdf' });
-        if (canShareFiles && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: fileName });
-        } else if (preOpenedWindow) {
-          // Fallback: write PDF into the pre-opened window
+        if (navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: fileName });
+            shared = true;
+          } catch (shareErr) {
+            // User cancelled share sheet — not an error, PDF was still generated
+            if (shareErr instanceof Error && shareErr.name === 'AbortError') {
+              shared = true; // don't fall through to other download methods
+            }
+          }
+        }
+      }
+
+      if (!shared) {
+        if (isIOS && preOpenedWindow) {
+          // iOS fallback: navigate the pre-opened window to the PDF
           const blobUrl = URL.createObjectURL(blob);
           preOpenedWindow.location.href = blobUrl;
           setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+        } else {
+          // Desktop & Android fallback: standard blob download
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
         }
-      } else {
-        // Desktop & Android: standard blob download
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
       }
     } catch (err) {
       console.error('PDF generation failed:', err);
