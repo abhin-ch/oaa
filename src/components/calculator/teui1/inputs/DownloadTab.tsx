@@ -311,29 +311,35 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
 
       // Mobile: try Web Share API first (works on both iOS and Android)
       if (isMobile && canShareFiles) {
-        const file = new File([blob], fileName, { type: 'application/pdf' });
-        if (navigator.canShare({ files: [file] })) {
-          try {
+        try {
+          const file = new File([blob], fileName, { type: 'application/pdf' });
+          if (navigator.canShare({ files: [file] })) {
             await navigator.share({ files: [file], title: fileName });
             shared = true;
-          } catch (shareErr) {
-            // User cancelled share sheet — not an error, PDF was still generated
-            if (shareErr instanceof Error && shareErr.name === 'AbortError') {
-              shared = true; // don't fall through to other download methods
-            }
           }
+        } catch (shareErr) {
+          // AbortError = user dismissed share sheet, PDF was still generated
+          if (shareErr instanceof Error && shareErr.name === 'AbortError') {
+            shared = true;
+          }
+          // Any other error: fall through to blob URL fallback
         }
       }
 
       if (!shared) {
-        if (isIOS && preOpenedWindow) {
-          // iOS fallback: navigate the pre-opened window to the PDF
-          const blobUrl = URL.createObjectURL(blob);
-          preOpenedWindow.location.href = blobUrl;
+        const blobUrl = URL.createObjectURL(blob);
+
+        if (isIOS) {
+          // iOS Safari: a.click() doesn't trigger downloads for blobs.
+          // Use pre-opened window if we have one, otherwise navigate current window.
+          if (preOpenedWindow) {
+            preOpenedWindow.location.href = blobUrl;
+          } else {
+            window.location.href = blobUrl;
+          }
           setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
         } else {
-          // Desktop & Android fallback: standard blob download
-          const blobUrl = URL.createObjectURL(blob);
+          // Desktop & Android: standard blob download
           const a = document.createElement('a');
           a.href = blobUrl;
           a.download = fileName;
