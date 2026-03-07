@@ -35,6 +35,16 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
     if (downloading) return;
     setDownloading(true);
 
+    // Pre-open window synchronously (while we still have user gesture context)
+    // so iOS Safari won't block it. Only needed as a fallback.
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const canShareFiles =
+      typeof navigator.share === 'function' && typeof navigator.canShare === 'function';
+    let preOpenedWindow: Window | null = null;
+    if (isIOS && !canShareFiles) {
+      preOpenedWindow = window.open('', '_blank');
+    }
+
     try {
       const [{ jsPDF }, { svg2pdf }] = await Promise.all([import('jspdf'), import('svg2pdf.js')]);
       void svg2pdf; // ensure plugin registers
@@ -296,14 +306,20 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
       const fileName = `${projectName}_TEUI-v1_${date}.pdf`;
 
       const blob = pdf.output('blob');
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
       if (isIOS) {
-        // iOS Safari doesn't support the download attribute — open in new tab
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, '_blank');
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+        // iOS: prefer Web Share API (native share sheet → Save to Files, AirDrop, etc.)
+        const file = new File([blob], fileName, { type: 'application/pdf' });
+        if (canShareFiles && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: fileName });
+        } else if (preOpenedWindow) {
+          // Fallback: write PDF into the pre-opened window
+          const blobUrl = URL.createObjectURL(blob);
+          preOpenedWindow.location.href = blobUrl;
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+        }
       } else {
+        // Desktop & Android: standard blob download
         const blobUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
@@ -315,6 +331,7 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
       }
     } catch (err) {
       console.error('PDF generation failed:', err);
+      if (preOpenedWindow) preOpenedWindow.close();
     } finally {
       setDownloading(false);
     }
