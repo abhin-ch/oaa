@@ -35,6 +35,17 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
     if (downloading) return;
     setDownloading(true);
 
+    // Detect mobile + share capability before async work begins
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const canShareFiles =
+      typeof navigator.share === 'function' && typeof navigator.canShare === 'function';
+    // iOS fallback: pre-open window synchronously while user gesture is active
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    let preOpenedWindow: Window | null = null;
+    if (isIOS && !canShareFiles) {
+      preOpenedWindow = window.open('', '_blank');
+    }
+
     try {
       const [{ jsPDF }, { svg2pdf }] = await Promise.all([import('jspdf'), import('svg2pdf.js')]);
       void svg2pdf; // ensure plugin registers
@@ -296,25 +307,45 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
       const fileName = `${projectName}_TEUI-v1_${date}.pdf`;
 
       const blob = pdf.output('blob');
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      let shared = false;
 
-      if (isIOS) {
-        // iOS Safari doesn't support the download attribute — open in new tab
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, '_blank');
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
-      } else {
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+      // Mobile: try Web Share API first (works on both iOS and Android)
+      if (isMobile && canShareFiles) {
+        const file = new File([blob], fileName, { type: 'application/pdf' });
+        if (navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: fileName });
+            shared = true;
+          } catch (shareErr) {
+            // User cancelled share sheet — not an error, PDF was still generated
+            if (shareErr instanceof Error && shareErr.name === 'AbortError') {
+              shared = true; // don't fall through to other download methods
+            }
+          }
+        }
+      }
+
+      if (!shared) {
+        if (isIOS && preOpenedWindow) {
+          // iOS fallback: navigate the pre-opened window to the PDF
+          const blobUrl = URL.createObjectURL(blob);
+          preOpenedWindow.location.href = blobUrl;
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+        } else {
+          // Desktop & Android fallback: standard blob download
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+        }
       }
     } catch (err) {
       console.error('PDF generation failed:', err);
+      if (preOpenedWindow) preOpenedWindow.close();
     } finally {
       setDownloading(false);
     }
