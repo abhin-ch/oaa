@@ -295,11 +295,24 @@ export function DownloadTab({ building, result }: DownloadTabProps) {
       const projectName = (building.meta.name ?? 'Building').replace(/\s+/g, '-');
       const fileName = `${projectName}_TEUI-v1_${date}.pdf`;
 
-      const dataUri = pdf.output('datauristring', { filename: fileName });
-      const a = document.createElement('a');
-      a.href = dataUri;
-      a.download = fileName;
-      a.click();
+      const blob = pdf.output('blob');
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+      if (isIOS) {
+        // iOS Safari doesn't support the download attribute — open in new tab
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+      } else {
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+      }
     } catch (err) {
       console.error('PDF generation failed:', err);
     } finally {
